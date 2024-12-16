@@ -75,11 +75,10 @@ def list_collections_for_domain(cmd_pointer, cmd: dict):
     if GLOBAL_SETTINGS["display"] != "api":
 
         # Prettify Entries number
-        df["Entries"] = df["Entries"].apply(  # pylint: disable=unsubscriptable-object, unsupported-assignment-operation
-            pretty_nr
-        )
+        df_print = df.copy()
+        df_print["Entries"] = df_print["Entries"].apply(pretty_nr)
 
-        output_table(df, return_val=False)
+        output_table(df_print, return_val=False)
 
     # Save results to file (prints success message)
     if "save_as" in cmd:

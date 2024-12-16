@@ -1,4 +1,4 @@
-"""Login Library for the Deepsearch Plugin"""
+"""Login procedure for the Deep Search plugin"""
 
 import os
 from datetime import datetime, timezone
@@ -27,12 +27,6 @@ def login(cmd_pointer):
     ----------
     cmd_pointer:
         The command pointer object
-    plugin_name:
-        Human-readable name of the plugin,
-        used for logging error/success messages
-    plugin_key:
-        Unique key for the plugin,
-        used to store login information in the command pointer object
     """
 
     # Check for existing credentials
@@ -148,11 +142,16 @@ def _uri_valid(url: str) -> bool:
 
 
 def _get_creds(cred_file, cmd_pointer):
-    """Return existing login credentials or prompt for new ones"""
+    """
+    Return existing login credentials or prompt for new ones.
+    """
+
     api_config = load_credentials(cred_file)
     if api_config is None:
-        output_warning("Please provide your Deep Search credentials", return_val=False)
-        output_text(f"<soft>Leave this blank to use the default: {DEFAULT_URL}</soft>", return_val=False)
+        output_warning(
+            ["Please provide your Deep Search credentials", f"Leave this blank to use the default: {DEFAULT_URL}"],
+            return_val=False,
+        )
         api_config = API_CONFIG_BLANK.copy()
         api_config = get_credentials(
             cmd_pointer=cmd_pointer, credentials=api_config, creds_to_set=["host", "auth:username", "auth:api_key"]

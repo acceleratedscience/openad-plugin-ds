@@ -64,11 +64,6 @@ def list_all_collections(cmd_pointer, cmd: dict):
     # Display results in CLI & Notebook
     if GLOBAL_SETTINGS["display"] != "api":
 
-        # Prettify Entries number
-        df["Entries"] = df["Entries"].apply(  # pylint: disable=unsubscriptable-object, unsupported-assignment-operation
-            pretty_nr
-        )
-
         # Print description of all collections
         if "details" in cmd:
             for collection in results_table:
@@ -90,8 +85,12 @@ def list_all_collections(cmd_pointer, cmd: dict):
                 )
                 output_text(print_str, return_val=False, edge=True, width=80, pad=1)
 
+        # Prettify Entries number
+        df_print = df.copy()
+        df_print["Entries"] = df_print["Entries"].apply(pretty_nr)
+
         # Print table
-        output_table(df, return_val=False)
+        output_table(df_print, return_val=False)
 
         # Print command hints to see descriptions
         if "details" not in cmd:
