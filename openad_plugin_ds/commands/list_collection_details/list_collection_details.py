@@ -73,7 +73,7 @@ def list_collection_details(cmd_pointer, cmd: dict):
                 "Description": collection.metadata.description,
                 "Domain": " / ".join(collection.metadata.domain),
                 "Type": collection.metadata.type,
-                "Entries": pretty_nr(collection.documents),
+                "Entries": collection.documents,
                 "Created": collection.metadata.created.strftime("%Y-%m-%d"),
                 "Created timestamp": collection.metadata.created,
             }

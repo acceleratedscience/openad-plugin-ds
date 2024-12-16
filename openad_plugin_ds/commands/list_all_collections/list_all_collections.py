@@ -39,7 +39,7 @@ def list_all_collections(cmd_pointer, cmd: dict):
         {
             "Collection Name": c.name,
             "Collection Key": c.source.index_key,
-            "Entries": pretty_nr(c.documents),
+            "Entries": c.documents,
             "Domain": " / ".join(c.metadata.domain),
             "Type": c.metadata.type,
             "Created": c.metadata.created.strftime("%Y-%m-%d"),
@@ -63,6 +63,11 @@ def list_all_collections(cmd_pointer, cmd: dict):
 
     # Display results in CLI & Notebook
     if GLOBAL_SETTINGS["display"] != "api":
+
+        # Prettify Entries number
+        df["Entries"] = df["Entries"].apply(  # pylint: disable=unsubscriptable-object, unsupported-assignment-operation
+            pretty_nr
+        )
 
         # Print description of all collections
         if "details" in cmd:
