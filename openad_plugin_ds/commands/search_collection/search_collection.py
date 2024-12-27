@@ -13,7 +13,7 @@ from copy import deepcopy
 from openad.plugins.style_parser import style, strip_tags
 from openad.app.global_var_lib import GLOBAL_SETTINGS
 from openad.helpers.general import confirm_prompt
-from openad.helpers.jupyter import save_df_as_csv
+from openad.helpers.jupyter import save_df_as_csv, parse_using_clause
 from openad.helpers.credentials import load_credentials
 from openad.helpers.output import output_text, output_table, output_error, output_warning
 
@@ -82,7 +82,7 @@ def search_collection(cmd_pointer, cmd: dict):
     )
 
     # Parse USING parameters
-    params = _parse_params(cmd.get("using"), allowed=["elastic_page_size", "elastic_id", "slop", "limit_results"])
+    params = parse_using_clause(cmd.get("using"), allowed=["elastic_page_size", "elastic_id", "slop", "limit_results"])
     elastic_page_size = int(params.get("elastic_page_size", defaults["elastic_page_size"]))
     elastic_id = params.get("elastic_id", defaults["elastic_id"])
     slop = int(params.get("slop", defaults["slop"]))
@@ -415,43 +415,3 @@ def _get_host(cmd_pointer):
         host = cred_file["host"]
 
     return host.rstrip("/")
-
-
-def _parse_params(params: list, allowed: list):
-    """
-    Parse list of tuples into a dictionary.
-
-    Used to parse the USING clause parameters.
-    - Input: [["foo", 123], ["bar", "baz"]]
-    - Output: {"foo": 123, "bar": "baz"}
-
-    Parameters
-    ----------
-    params : list
-        List of tuples
-    allowed : list
-        List of allowed keys
-    """
-
-    params_dict = {}
-    invalid_keys = []
-
-    if not params:
-        return params_dict
-
-    for [key, val] in params:
-        if key in allowed:
-            params_dict[key] = val
-        else:
-            invalid_keys.append(key)
-
-    if invalid_keys:
-        output_warning(
-            "Warning: Ignored invalid USING parameters:\n- <error>"
-            + ("</error>\n- <error>".join(invalid_keys))
-            + "</error>",
-            return_val=False,
-            pad=1,
-        )
-
-    return params_dict
