@@ -8,7 +8,7 @@ from openad.helpers.output import output_error, output_warning, output_text, out
 # Plugin
 from openad_grammar_def import molecules, molecule_identifier, clause_save_as
 from openad_plugin_ds.plugin_grammar_def import find, w_ith, substructure
-from openad_plugin_ds.plugin_params import PLUGIN_NAME, PLUGIN_KEY, CMD_NOTE, PLUGIN_NAMESPACE
+from openad_plugin_ds.plugin_params import PLUGIN_NAME, PLUGIN_KEY, PLUGIN_NAMESPACE
 
 from openad_plugin_ds.commands.find_mols_substruct.find_mols_substruct import find_substructure_molecules
 from openad_plugin_ds.commands.find_mols_substruct.description import description
@@ -55,7 +55,6 @@ class PluginCommand:
                 category=self.category,
                 command=f"{PLUGIN_NAMESPACE} find molecules with substructure <smiles> [ save as '<filename.csv>' ]",
                 description=description,
-                note=CMD_NOTE,
             )
         )
 

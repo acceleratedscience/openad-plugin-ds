@@ -7,7 +7,7 @@ from openad.core.help import help_dict_create_v2
 # Plugin
 from openad_grammar_def import str_quoted, list_quoted, clause_save_as
 from openad_plugin_ds.plugin_grammar_def import l_ist, collections, f_or, domain, domains
-from openad_plugin_ds.plugin_params import PLUGIN_NAME, PLUGIN_KEY, CMD_NOTE, PLUGIN_NAMESPACE
+from openad_plugin_ds.plugin_params import PLUGIN_NAME, PLUGIN_KEY, PLUGIN_NAMESPACE
 from openad_plugin_ds.commands.list_collections_for_domain.list_collections_for_domain import (
     list_collections_for_domain,
 )
@@ -58,7 +58,6 @@ class PluginCommand:
                     f"""{PLUGIN_NAMESPACE} list collections for domains ['<domain_name>','<domain_name>',...] [ save as '<filename.csv>' ]""",
                 ],
                 description=description,
-                note=CMD_NOTE,
             )
         )
 

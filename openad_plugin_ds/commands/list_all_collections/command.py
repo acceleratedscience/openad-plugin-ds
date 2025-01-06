@@ -8,7 +8,7 @@ from openad.core.help import help_dict_create_v2
 # Plugin
 from openad_grammar_def import clause_save_as
 from openad_plugin_ds.plugin_grammar_def import l_ist, a_ll, collections, details
-from openad_plugin_ds.plugin_params import PLUGIN_NAME, PLUGIN_KEY, CMD_NOTE, PLUGIN_NAMESPACE
+from openad_plugin_ds.plugin_params import PLUGIN_NAME, PLUGIN_KEY, PLUGIN_NAMESPACE
 from openad_plugin_ds.commands.list_all_collections.list_all_collections import list_all_collections
 from openad_plugin_ds.commands.list_all_collections.description import description
 
@@ -53,7 +53,6 @@ class PluginCommand:
                 category=self.category,
                 command=f"""{PLUGIN_NAMESPACE} list all collections [ details ] [ save as '<filename.csv>' ]""",
                 description=description,
-                note=CMD_NOTE,
             )
         )
 

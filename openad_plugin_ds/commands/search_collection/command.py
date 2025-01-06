@@ -14,7 +14,7 @@ from openad_plugin_ds.plugin_grammar_def import (
     clause_estimate_only,
     clause_return_as_data,
 )
-from openad_plugin_ds.plugin_params import PLUGIN_NAME, PLUGIN_KEY, CMD_NOTE, PLUGIN_NAMESPACE
+from openad_plugin_ds.plugin_params import PLUGIN_NAME, PLUGIN_KEY, PLUGIN_NAMESPACE
 from openad_plugin_ds.commands.search_collection.search_collection import search_collection
 from openad_plugin_ds.commands.search_collection.description import description
 
@@ -68,7 +68,6 @@ class PluginCommand:
                 category=self.category,
                 command=command,
                 description=description,
-                note=CMD_NOTE,
             )
         )
 

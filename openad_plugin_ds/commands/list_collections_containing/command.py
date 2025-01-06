@@ -7,7 +7,7 @@ from openad.core.help import help_dict_create_v2
 # Plugin
 from openad_grammar_def import str_quoted, clause_save_as
 from openad_plugin_ds.plugin_grammar_def import l_ist, collections, containing
-from openad_plugin_ds.plugin_params import PLUGIN_NAME, PLUGIN_KEY, CMD_NOTE, PLUGIN_NAMESPACE
+from openad_plugin_ds.plugin_params import PLUGIN_NAME, PLUGIN_KEY, PLUGIN_NAMESPACE
 from openad_plugin_ds.commands.list_collections_containing.list_collections_containing import (
     list_collections_containing,
 )
@@ -54,7 +54,6 @@ class PluginCommand:
                 category=self.category,
                 command=f"""{PLUGIN_NAMESPACE} list collections containing '<search_query>' [ save as '<filename.csv>' ]""",
                 description=description,
-                note=CMD_NOTE,
             )
         )
 

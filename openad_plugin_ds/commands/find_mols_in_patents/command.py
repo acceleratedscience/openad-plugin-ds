@@ -7,7 +7,7 @@ from openad.core.help import help_dict_create_v2
 # Plugin
 from openad_grammar_def import molecules, list_quoted, str_quoted, str_strict, clause_save_as
 from openad_plugin_ds.plugin_grammar_def import find, i_n, patents, f_rom, l_ist, file, dataframe
-from openad_plugin_ds.plugin_params import PLUGIN_NAME, PLUGIN_KEY, CMD_NOTE, PLUGIN_NAMESPACE
+from openad_plugin_ds.plugin_params import PLUGIN_NAME, PLUGIN_KEY, PLUGIN_NAMESPACE
 from openad_plugin_ds.commands.find_mols_in_patents.find_mols_in_patents import find_molecules_in_patents
 from openad_plugin_ds.commands.find_mols_in_patents.description import description
 
@@ -62,7 +62,6 @@ class PluginCommand:
                     f"{PLUGIN_NAMESPACE} find molecules in patents from dataframe <dataframe_name> [ save as '<filename.csv>' ]",
                 ],
                 description=description,
-                note=CMD_NOTE,
             )
         )
 
