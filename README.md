@@ -32,3 +32,23 @@ Installation for development:
     git clone git@github.com:acceleratedscience/openad-plugin-ds.git
     cd openad-plugin-ds
     pip install -e .
+
+<br>
+
+## Login
+
+In order to use this plugin, you need an API key.
+
+1. Sign up for a Deep Search account at [ds4sd.github.io](https://ds4sd.github.io)
+2. Obtain your API key by clicking the `Toolkit / API` icon in the top right hand corner, then open the "HTTP" section and click the "Generate new API key" button
+    <a href="assets/ds4sd-api-key.png" target="_blank"><img src="assets/ds4sd-api-key.png" /></a>
+
+3. Use any Deep Search command to be prompted for your credentials.
+
+    - **Hostname:** (Enter blank for default - [https://sds.app.accelerate.science](https://sds.app.accelerate.science))
+    - **Email:** Your email
+    - **API_key:** Your API key
+
+    You should get a message saying you successfully logged in.
+
+    To reset your credentials, run `ds reset login`

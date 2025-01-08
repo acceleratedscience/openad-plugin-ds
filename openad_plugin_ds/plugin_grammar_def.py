@@ -1,29 +1,39 @@
 import pyparsing as py
 
-search = py.CaselessKeyword("search")
-f_or = py.CaselessKeyword("for")
 find = py.CaselessKeyword("find")
 similar = py.CaselessKeyword("similar")
 to = py.CaselessKeyword("to")
-save = py.CaselessKeyword("save")
-a_s = py.CaselessKeyword("as")
+
+w_ith = py.CaselessKeyword("with")
+substructure = py.CaselessKeyword("substructure")
+
 i_n = py.CaselessKeyword("in")
-l_ist = py.CaselessKeyword("list")
 patents = py.CaselessKeyword("patents")
 f_rom = py.CaselessKeyword("from")
 file = py.CaselessKeyword("file")
-dataframe = py.CaselessKeyword("dataframe")
-containing = py.CaselessKeyword("containing")
-substructure = py.CaselessKeyword("substructure")
-collection = py.CaselessKeyword("collection")
-collections = py.CaselessKeyword("collections")
 l_ist = py.CaselessKeyword("list")
-matches = py.CaselessKeyword("matches")
+dataframe = py.CaselessKeyword("dataframe")
+
+l_ist = py.CaselessKeyword("list")
 a_ll = py.CaselessKeyword("all")
-details = py.CaselessKeyword("details")
-domain = py.CaselessKeyword("domain")
+collections = py.CaselessKeyword("collections")
 domains = py.CaselessKeyword("domains")
-w_ith = py.CaselessKeyword("with")
+
+containing = py.CaselessKeyword("containing")
+f_or = py.CaselessKeyword("for")
+domain = py.CaselessKeyword("domain")
+
+details = py.CaselessKeyword("details")
+
+search = py.CaselessKeyword("search")
+collection = py.CaselessKeyword("collection")
+
+save = py.CaselessKeyword("save")
+a_s = py.CaselessKeyword("as")
+
+reset = py.CaselessKeyword("reset")
+login = py.CaselessKeyword("login")
+
 
 # Search collection
 clause_show = py.Optional(

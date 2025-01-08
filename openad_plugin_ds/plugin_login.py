@@ -122,11 +122,16 @@ def login(cmd_pointer):
         return False, None
 
 
-def reset(cmd_pointer):
-    """Remove the deepsearch credentiuals file"""
-    cred_file = os.path.expanduser(f"{cmd_pointer.home_dir}/deepsearch_api.cred")
-    if os.path.isfile(cred_file):
-        os.remove(cred_file)
+def reset_login(cmd_pointer):
+    """Remove the deepsearch credentials file"""
+    cred_path = os.path.expanduser(f"{cmd_pointer.home_dir}/deepsearch_api.cred")
+    if os.path.isfile(cred_path):
+        os.remove(cred_path)
+        output_success(
+            ["Login credentials deleted", "Run any Deep Search command to re-authenticate"], return_val=False
+        )
+    else:
+        output_warning("No login credentials found", return_val=False)
 
 
 def _uri_valid(url: str) -> bool:

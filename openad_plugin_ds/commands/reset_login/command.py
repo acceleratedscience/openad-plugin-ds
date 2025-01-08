@@ -4,19 +4,18 @@ import pyparsing as py
 # OpenAD
 from openad.core.help import help_dict_create_v2
 
+
 # Plugin
-from openad_grammar_def import clause_save_as
-from openad_plugin_ds.plugin_grammar_def import l_ist, a_ll, domains
+from openad_plugin_ds.plugin_grammar_def import reset, login
 from openad_plugin_ds.plugin_params import PLUGIN_NAME, PLUGIN_KEY, PLUGIN_NAMESPACE
-from openad_plugin_ds.commands.list_all_domains.list_all_domains import list_all_domains
-from openad_plugin_ds.commands.list_all_domains.description import description
+from openad_plugin_ds.commands.list_all_collections.description import description
 
 # Login
-from openad_plugin_ds.plugin_login import login
+from openad_plugin_ds.plugin_login import reset_login
 
 
 class PluginCommand:
-    """List all domains..."""
+    """Reset login"""
 
     category: str  # Category of command
     index: int  # Order in help
@@ -24,8 +23,8 @@ class PluginCommand:
     parser_id: str  # Internal unique identifier
 
     def __init__(self):
-        self.category = "Collections"
-        self.index = 1
+        self.category = "System"
+        self.index = 0
         self.name = os.path.basename(os.path.dirname(os.path.abspath(__file__)))
         self.parser_id = f"plugin_{PLUGIN_KEY}_{self.name}"
 
@@ -33,15 +32,15 @@ class PluginCommand:
         """Create the command definition & documentation"""
 
         # Command definition
-        statements.append(
-            py.Forward(py.Word(PLUGIN_NAMESPACE) + l_ist + a_ll + domains + clause_save_as)(self.parser_id)
-        )
+        statements.append(py.Forward(py.Word(PLUGIN_NAMESPACE) + reset + login)(self.parser_id))
+
+        # Command help
         grammar_help.append(
             help_dict_create_v2(
                 plugin_name=PLUGIN_NAME,
-                plugin_namespace=PLUGIN_NAMESPACE,  # <reverse> {PLUGIN_NAME} </reverse>
+                plugin_namespace=PLUGIN_NAMESPACE,
                 category=self.category,
-                command=f"""{PLUGIN_NAMESPACE} list all domains [ save as '<filename.csv>' ]""",
+                command=f"""{PLUGIN_NAMESPACE} reset login""",
                 description=description,
             )
         )
@@ -49,10 +48,4 @@ class PluginCommand:
     def exec_command(self, cmd_pointer, parser):
         """Execute the command"""
 
-        # Login
-        login(cmd_pointer)
-
-        # Execute
-        cmd = parser.as_dict()
-        # print(cmd)
-        return list_all_domains(cmd_pointer, cmd)
+        reset_login(cmd_pointer)

@@ -29,7 +29,7 @@ class PluginCommand:
         self.name = os.path.basename(os.path.dirname(os.path.abspath(__file__)))
         self.parser_id = f"plugin_{PLUGIN_KEY}_{self.name}"
 
-    def add_grammar(self, statements: l_ist, grammar_help: l_ist):
+    def add_grammar(self, statements: list, grammar_help: list):
         """Create the command definition & documentation"""
 
         # Command definition
