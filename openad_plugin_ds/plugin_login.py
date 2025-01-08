@@ -153,6 +153,21 @@ def _get_creds(cred_file, cmd_pointer):
 
     api_config = load_credentials(cred_file)
     if api_config is None:
+        output_text(
+            "\n".join(
+                [
+                    "<h1>Deep Search Authentication</h1>",
+                    "To obtain your API key, visit:",
+                    "<link>ds4sd.github.io</link>",
+                    "",
+                    "For instructions, visit:",
+                    "<link>github.com/acceleratedscience/openad-plugin-ds#login</link>",
+                ]
+            ),
+            return_val=False,
+            pad=2,
+        )
+
         output_warning(
             ["Please provide your Deep Search credentials", f"Leave this blank to use the default: {DEFAULT_URL}"],
             return_val=False,

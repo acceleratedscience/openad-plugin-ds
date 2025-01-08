@@ -41,7 +41,9 @@ In order to use this plugin, you need an API key.
 
 1. Sign up for a Deep Search account at [ds4sd.github.io](https://ds4sd.github.io)
 2. Obtain your API key by clicking the `Toolkit / API` icon in the top right hand corner, then open the "HTTP" section and click the "Generate new API key" button
-    <a href="assets/ds4sd-api-key.png" target="_blank"><img src="assets/ds4sd-api-key.png" /></a>
+    
+    <!-- <a href="assets/ds4sd-api-key.png" target="_blank"><img src="assets/ds4sd-api-key.png" /></a> -->
+    ![Deep Search API key](assets/ds4sd-api-key.png)
 
 3. Use any Deep Search command to be prompted for your credentials.
 
