@@ -56,8 +56,6 @@ def list_collections_containing(cmd_pointer, cmd: dict):
     ):
         pbar.set_description(f"Querying {c.name}")
 
-        # print(c.metadata.description)
-
         # Search only on document collections
         if c.metadata.type != "Document":
             continue
@@ -74,6 +72,9 @@ def list_collections_containing(cmd_pointer, cmd: dict):
                         "Matches": query_results.outputs["data_count"],
                     }
                 )
+
+            # For testing
+            # - - -
             # raise RunQueryError(task_id=1, message="This is a test error", error_type="err123", detail="aaa")
             # raise RunQueryError(
             #     task_id=1,
@@ -81,6 +82,7 @@ def list_collections_containing(cmd_pointer, cmd: dict):
             #     error_type="RuntimeError",
             #     detail="",
             # )
+
         except RunQueryError as err:
             output_error(plugin_msg("err_deepsearch", err), return_val=False)
 

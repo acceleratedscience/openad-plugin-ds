@@ -1,0 +1,60 @@
+deep search
+deep search ?
+? deep search
+ds
+ds ?
+? ds
+
+ds find molecules similar ?
+ds find molecules similar to CC(=CCC/C(=C/CO)/C)C
+ds find molecules similar to 'C1(C(=C)C([O-])C1C)=O'
+ds find molecules similar to CC1=CCC2CC1C2(C)C save as 'similar_mols.csv'
+ds find molecules similar to CC1CCC2C1C(=O)OC=C2C save as 'similar_mols'
+
+ds find molecules with substructure ?
+ds find molecules with substructure C1(C(=C)C([O-])C1C)=O
+ds find molecules with substructure 'C1=CCCCC1' save as 'my_mol'
+
+ds find molecules in patents ?
+ds find molecules in patents from list ['CN108473493B','US20190023713A1']
+ds find molecules in patents from file 'my_patents.csv'
+ds find molecules in patents from dataframe my_patents_df
+
+ds list all collections ?
+ds list all collections
+ds list all collections details
+ds list all collections save as 'all_collections.csv'
+
+ds list all domains ?
+ds list all domains
+ds list all domains save as 'all_domains'
+
+ds list collections containing ?
+ds list collections containing 'Ibuprofen'
+ds list collections containing '"blood-brain barrier"'
+ds list collections containing 'main-text.text:("power conversion efficiency" OR PCE) AND organ*'
+
+ds list collections for domain ?
+ds list collections for domain 'Business Insights'
+ds list collections for domains ['Materials Science','Scientific Literature']
+
+ds list collection details ?
+ds list collection details 'Patents from USPTO'
+ds list collection details 'patent-uspto'
+
+ds search collection ?
+ds search collection 'arxiv-abstract' for 'ide("power conversion efficiency" OR PCE) AND organ*' USING (limit_results=10 slop=0) show (docs)
+ds search collection 'arxiv-abstract' for '"power efficiency"' USING (slop=0) estimate only
+ds search collection 'arxiv-abstract' for '"power efficiency"' USING (slop=1) estimate only
+ds search collection 'arxiv-abstract' for '"power efficiency"' USING (slop=5) estimate only
+ds search collection 'pubchem' for 'Ibuprofen' show (data)
+result open
+ds search collection 'patent-uspto' for '"CC(CCO)CCCC(C)C"' show (data)
+ds search collection 'patent-uspto' for '"CC(CCO)CCCC(C)C"' show (docs)
+
+ds find patents ?
+ds find patents containing molecule CC(C)(c1ccccn1)C(CC(=O)O)Nc1nc(-c2c[nH]c3ncc(Cl)cc23)c(C#N)cc1F
+ds find patents containing molecule 'CC(C)(c1ccccn1)C(CC(=O)O)Nc1nc(-c2c[nH]c3ncc(Cl)cc23)c(C#N)cc1F' save as 'patents'
+ds find patents containing molecule InChI=1S/C24H20ClFN6O2/c1-24(2,18-5-3-4-6-28-18)19(9-20(33)34)31-23-17(26)7-13(10-27)21(32-23)16-12-30-22-15(16)8-14(25)11-29-22/h3-8,11-12,19H,9H2,1-2H3,(H,29,30)(H,31,32)(H,33,34)
+ds find patents containing molecule JUPUMSRQQQUOLP-UHFFFAOYSA-N save as 'patents'
+ds find patents containing molecule 'JUPUMSRQQQUOLP-UHFFFAOYSA-N'

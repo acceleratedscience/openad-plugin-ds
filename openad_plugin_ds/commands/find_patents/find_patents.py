@@ -92,11 +92,11 @@ def find_patents_containing_molecule(cmd_pointer, cmd: dict):
     # `enrich mols with analysis`
     save_result(
         create_analysis_record(
-            identifier,
-            PLUGIN_KEY,
-            "Patents_Containing_Molecule",
-            "",
-            results_table,
+            smiles=identifier,
+            toolkit=PLUGIN_KEY,
+            function="patents_containing_molecule",
+            parameters="",
+            results=results_table,
         ),
         cmd_pointer=cmd_pointer,
     )

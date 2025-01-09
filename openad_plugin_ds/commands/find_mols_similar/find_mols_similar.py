@@ -89,9 +89,10 @@ def find_similar_molecules(cmd_pointer, cmd):
     # Save results as analysis records that can be merged
     # with the molecule working set in a follow up comand:
     # `enrich mols with analysis`
+    # print(">> SAVE RESULT", smiles)
     save_result(
         create_analysis_record(
-            canonical_smiles,
+            smiles,
             PLUGIN_KEY,
             "Similar_Molecules",
             "",
