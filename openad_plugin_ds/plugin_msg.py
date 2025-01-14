@@ -1,5 +1,5 @@
 # fmt: off
-from openad.helpers.output_msgs import msg as _msg
+from openad_tools.output_msgs import msg as _msg
 
 err_runtime = """Your search query is too complex to run across all collections.
 <yellow>The query string is passed onto the Elasticsearch engine, hence you can group your terms by wrapping them in additional double quotes.

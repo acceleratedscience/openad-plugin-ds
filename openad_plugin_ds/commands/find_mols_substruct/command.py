@@ -3,15 +3,15 @@ import pyparsing as py
 
 # OpenAD
 from openad.core.help import help_dict_create_v2
-from openad.helpers.output import output_error, output_warning, output_text, output_success, output_table
+
+# OpenAD tools
+from openad_tools.grammar_def import molecules, molecule_identifier, clause_save_as
 
 # Plugin
-from openad_grammar_def import molecules, molecule_identifier, clause_save_as
 from openad_plugin_ds.plugin_grammar_def import find, w_ith, substructure
-from openad_plugin_ds.plugin_params import PLUGIN_NAME, PLUGIN_KEY, PLUGIN_NAMESPACE
-
-from openad_plugin_ds.commands.find_mols_substruct.find_mols_substruct import find_substructure_molecules
 from openad_plugin_ds.commands.find_mols_substruct.description import description
+from openad_plugin_ds.plugin_params import PLUGIN_NAME, PLUGIN_KEY, PLUGIN_NAMESPACE
+from openad_plugin_ds.commands.find_mols_substruct.find_mols_substruct import find_substructure_molecules
 
 # Login
 from openad_plugin_ds.plugin_login import login

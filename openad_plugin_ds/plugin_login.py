@@ -1,15 +1,20 @@
 """Login procedure for the Deep Search plugin"""
 
 import os
-from datetime import datetime, timezone
+import jwt
 import time
 import requests
-import jwt
 import deepsearch as ds
-from openad.helpers.output import output_text, output_error, output_warning, output_success
-from openad.helpers.credentials import load_credentials, get_credentials, write_credentials
-from openad_plugin_ds.plugin_params import PLUGIN_NAME, PLUGIN_KEY
+from datetime import datetime, timezone
 
+# OpenAD
+from openad.helpers.credentials import load_credentials, get_credentials, write_credentials
+
+# OpenAD tools
+from openad_tools.output import output_text, output_error, output_warning, output_success
+
+# Plugin
+from openad_plugin_ds.plugin_params import PLUGIN_NAME, PLUGIN_KEY
 
 DEFAULT_URL = "https://sds.app.accelerate.science/"
 API_CONFIG_BLANK = {

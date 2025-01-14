@@ -2,9 +2,11 @@ import pandas as pd
 
 # OpenAD
 from openad.app.global_var_lib import GLOBAL_SETTINGS
-from openad.helpers.general import pretty_nr
-from openad.helpers.jupyter import save_df_as_csv
-from openad.helpers.output import output_error, output_table
+
+# OpenAD tools
+from openad_tools.helpers import pretty_nr
+from openad_tools.jupyter import save_df_as_csv
+from openad_tools.output import output_error, output_table
 
 # Plugin
 from openad_plugin_ds.plugin_msg import msg as plugin_msg

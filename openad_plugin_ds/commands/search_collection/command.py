@@ -5,7 +5,7 @@ import pyparsing as py
 from openad.core.help import help_dict_create_v2
 
 # Plugin
-from openad_grammar_def import str_strict_or_quoted, clause_using, clause_save_as
+from openad_tools.grammar_def import str_strict_or_quoted, clause_using, clause_save_as
 from openad_plugin_ds.plugin_grammar_def import (
     search,
     f_or,

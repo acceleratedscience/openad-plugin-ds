@@ -5,7 +5,7 @@ import pyparsing as py
 from openad.core.help import help_dict_create_v2
 
 # Plugin
-from openad_grammar_def import str_quoted, clause_save_as
+from openad_tools.grammar_def import str_quoted, clause_save_as
 from openad_plugin_ds.plugin_grammar_def import l_ist, collection, details
 from openad_plugin_ds.plugin_params import PLUGIN_NAME, PLUGIN_KEY, PLUGIN_NAMESPACE
 from openad_plugin_ds.commands.list_collection_details.list_collection_details import list_collection_details

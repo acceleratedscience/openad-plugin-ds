@@ -3,9 +3,10 @@ import pandas as pd
 # OpenAD
 from openad.app.global_var_lib import GLOBAL_SETTINGS
 from openad.smols.smol_functions import valid_smiles
-from openad.helpers.output import output_success, output_error, output_table
-from openad.helpers.jupyter import save_df_as_csv
-from openad.helpers.jupyter import jup_display_input_molecule
+
+# OpenAD tools
+from openad_tools.output import output_success, output_error, output_table
+from openad_tools.jupyter import save_df_as_csv, jup_display_input_molecule
 
 # Plugin
 from openad_plugin_ds.plugin_params import PLUGIN_KEY

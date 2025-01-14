@@ -10,12 +10,15 @@ import urllib.parse
 from copy import deepcopy
 
 # OpenAD
-from openad.plugins.style_parser import style, strip_tags
 from openad.app.global_var_lib import GLOBAL_SETTINGS
-from openad.helpers.general import confirm_prompt
-from openad.helpers.jupyter import save_df_as_csv, parse_using_clause
 from openad.helpers.credentials import load_credentials
-from openad.helpers.output import output_text, output_table, output_error, output_warning
+
+# OpenAD tools
+from openad_tools.style_parser import style, strip_tags
+from openad_tools.helpers import confirm_prompt
+from openad_tools.jupyter import save_df_as_csv
+from openad_tools.pyparsing import parse_using_clause
+from openad_tools.output import output_text, output_table, output_error, output_warning
 
 # Plugin
 from openad_plugin_ds.plugin_msg import msg as plugin_msg

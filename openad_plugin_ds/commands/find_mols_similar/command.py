@@ -5,7 +5,7 @@ import pyparsing as py
 from openad.core.help import help_dict_create_v2
 
 # Plugin
-from openad_grammar_def import molecules, molecule_identifier, clause_save_as
+from openad_tools.grammar_def import molecules, molecule_identifier, clause_save_as
 from openad_plugin_ds.plugin_grammar_def import find, similar, to
 from openad_plugin_ds.plugin_params import PLUGIN_NAME, PLUGIN_KEY, PLUGIN_NAMESPACE
 from openad_plugin_ds.commands.find_mols_similar.find_mols_similar import find_similar_molecules
