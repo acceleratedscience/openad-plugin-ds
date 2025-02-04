@@ -73,9 +73,9 @@ def search_collection(cmd_pointer, cmd: dict):
     # Query paremeter defaults
     defaults = {
         "collection_name_or_key": "pubchem",
-        "elastic_page_size": 50,
-        "elastic_id": "default",
-        "slop": 3,
+        "elastic_page_size": 50,  # aka `page_size` (per ds4sd examle and deprecated toolkit command)
+        "elastic_id": "default",  # aka `system_id` (per ds4sd examle and deprecated toolkit command)
+        "slop": 3,  # aka `edit_distance` (per ds4sd examle and deprecated toolkit command)
         "limit_results": 0,
     }
 
@@ -85,10 +85,28 @@ def search_collection(cmd_pointer, cmd: dict):
     )
 
     # Parse USING parameters
-    params = parse_using_clause(cmd.get("using"), allowed=["elastic_page_size", "elastic_id", "slop", "limit_results"])
-    elastic_page_size = int(params.get("elastic_page_size", defaults["elastic_page_size"]))
-    elastic_id = params.get("elastic_id", defaults["elastic_id"])
-    slop = int(params.get("slop", defaults["slop"]))
+    params = parse_using_clause(
+        cmd.get("using"),
+        allowed=[
+            "elastic_page_size",
+            "page_size",  # Backward compatibilty, maps to "elastic_page_size"
+            "elastic_id",
+            "system_id",  # Backward compatibilty, maps to "elastic_id"
+            "slop",
+            "edit_distance",  # Backward compatibilty, maps to "slop"
+            "limit_results",
+        ],
+    )
+    elastic_page_size = int(
+        params.get("elastic_page_size", defaults["elastic_page_size"])
+        or params.get("page_size", defaults["elastic_page_size"])
+    )  # Backward compatibilty
+    elastic_id = params.get("elastic_id", defaults["elastic_id"]) or params.get(
+        "system_id", defaults["elastic_id"]
+    )  # Backward compatibilty
+    slop = int(
+        params.get("slop", defaults["slop"]) or params.get("edit_distance", defaults["slop"])
+    )  # Backward compatibilty
     limit_results = int(params.get("limit_results", defaults["limit_results"]))
 
     # Parse collections

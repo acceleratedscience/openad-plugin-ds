@@ -34,7 +34,7 @@ class PluginCommand:
 
         # Command definition
         statements.append(
-            py.Forward(py.Word(PLUGIN_NAMESPACE) + l_ist + a_ll + domains + clause_save_as)(self.parser_id)
+            py.Forward(py.CaselessKeyword(PLUGIN_NAMESPACE) + l_ist + a_ll + domains + clause_save_as)(self.parser_id)
         )
         grammar_help.append(
             help_dict_create_v2(

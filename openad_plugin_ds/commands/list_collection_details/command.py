@@ -5,7 +5,7 @@ import pyparsing as py
 from openad.core.help import help_dict_create_v2
 
 # Plugin
-from openad_tools.grammar_def import str_quoted, clause_save_as
+from openad_tools.grammar_def import str_quoted
 from openad_plugin_ds.plugin_grammar_def import l_ist, collection, details
 from openad_plugin_ds.plugin_params import PLUGIN_NAME, PLUGIN_KEY, PLUGIN_NAMESPACE
 from openad_plugin_ds.commands.list_collection_details.list_collection_details import list_collection_details
@@ -34,8 +34,26 @@ class PluginCommand:
 
         # Command definition
         statements.append(
+            py.Forward(py.CaselessKeyword(PLUGIN_NAMESPACE) + l_ist + collection + details + str_quoted("collection"))(
+                self.parser_id
+            )
+        )
+
+        # BACKWARD COMPATIBILITY WITH TOOLKIT COMMAND
+        # -------------------------------------------
+        # Original command:
+        #   - display collection details '<collection_name_or_key>'
+        # New command:
+        #   - ds list collection details '<collection_name_or_key>'
+        # To be forwarded:
+        #   - [ ds ] display collection details '<collection_name_or_key>'
+        statements.append(
             py.Forward(
-                py.Word(PLUGIN_NAMESPACE) + l_ist + collection + details + str_quoted("collection") + clause_save_as
+                py.CaselessKeyword(PLUGIN_NAMESPACE)
+                + py.CaselessKeyword("display")
+                + collection
+                + details
+                + str_quoted("collection")
             )(self.parser_id)
         )
 

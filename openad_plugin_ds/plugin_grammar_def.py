@@ -1,6 +1,7 @@
 import pyparsing as py
 
-find = py.CaselessKeyword("find")
+# Note: Decided to revert to "search for" instead of "find" but both are supported
+search_for = py.MatchFirst([py.CaselessKeyword("find"), py.CaselessKeyword("search for"), py.CaselessKeyword("search")])
 similar = py.CaselessKeyword("similar")
 to = py.CaselessKeyword("to")
 
@@ -45,8 +46,3 @@ clause_show = py.Optional(
 clause_estimate_only = py.Optional(py.CaselessKeyword("estimate").suppress() + py.CaselessKeyword("only").suppress())(
     "estimate_only"
 )
-clause_return_as_data = py.Optional(
-    py.CaselessKeyword("return").suppress()
-    + py.CaselessKeyword("as").suppress()
-    + py.CaselessKeyword("data").suppress()
-)("return_as_data")

@@ -8,7 +8,7 @@ from openad.core.help import help_dict_create_v2
 from openad_tools.grammar_def import molecules, molecule_identifier, clause_save_as
 
 # Plugin
-from openad_plugin_ds.plugin_grammar_def import find, w_ith, substructure
+from openad_plugin_ds.plugin_grammar_def import search_for, w_ith, substructure
 from openad_plugin_ds.commands.find_mols_substruct.description import description
 from openad_plugin_ds.plugin_params import PLUGIN_NAME, PLUGIN_KEY, PLUGIN_NAMESPACE
 from openad_plugin_ds.commands.find_mols_substruct.find_mols_substruct import find_substructure_molecules
@@ -37,11 +37,31 @@ class PluginCommand:
         # Command definition
         statements.append(
             py.Forward(
-                py.Word(PLUGIN_NAMESPACE)
-                + find
+                py.CaselessKeyword(PLUGIN_NAMESPACE)
+                + search_for
                 + molecules
                 + w_ith
                 + substructure
+                + molecule_identifier("smiles")
+                + clause_save_as
+            )(self.parser_id)
+        )
+
+        # BACKWARD COMPATIBILITY WITH TOOLKIT COMMAND
+        # -------------------------------------------
+        # Original command:
+        #   - search for substructure instances of <smiles>
+        # New command:
+        #   - ds search for molecules with substructure <smiles>
+        # To be forwarded:
+        #   - [ ds ] search for substructure instances of <smiles>
+        statements.append(
+            py.Forward(
+                py.CaselessKeyword(PLUGIN_NAMESPACE)
+                + search_for
+                + substructure
+                + py.CaselessKeyword("instances")
+                + py.CaselessKeyword("of")
                 + molecule_identifier("smiles")
                 + clause_save_as
             )(self.parser_id)
@@ -53,7 +73,7 @@ class PluginCommand:
                 plugin_name=PLUGIN_NAME,
                 plugin_namespace=PLUGIN_NAMESPACE,
                 category=self.category,
-                command=f"{PLUGIN_NAMESPACE} find molecules with substructure <smiles> [ save as '<filename.csv>' ]",
+                command=f"{PLUGIN_NAMESPACE} search for molecules with substructure <smiles> [ save as '<filename.csv>' ]",
                 description=description,
             )
         )

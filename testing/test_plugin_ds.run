@@ -4,20 +4,20 @@ deep search ?
 ds
 ds ?
 
-ds find molecules similar ?
-ds find molecules similar to CC(=CCC/C(=C/CO)/C)C
-ds find molecules similar to 'C1(C(=C)C([O-])C1C)=O'
-ds find molecules similar to CC1=CCC2CC1C2(C)C save as 'similar_mols.csv'
-ds find molecules similar to CC1CCC2C1C(=O)OC=C2C save as 'similar_mols'
+ds search for molecules similar ?
+ds search for molecules similar to CC(=CCC/C(=C/CO)/C)C
+ds search for molecules similar to 'C1(C(=C)C([O-])C1C)=O'
+ds search for molecules similar to CC1=CCC2CC1C2(C)C save as 'similar_mols.csv'
+ds search for molecules similar to CC1CCC2C1C(=O)OC=C2C save as 'similar_mols'
 
-ds find molecules with substructure ?
-ds find molecules with substructure C1(C(=C)C([O-])C1C)=O
-ds find molecules with substructure 'C1=CCCCC1' save as 'my_mol'
+ds search for molecules with substructure ?
+ds search for molecules with substructure C1(C(=C)C([O-])C1C)=O
+ds search for molecules with substructure 'C1=CCCCC1' save as 'my_mol'
 
-ds find molecules in patents ?
-ds find molecules in patents from list ['CN108473493B','US20190023713A1']
-ds find molecules in patents from file 'my_patents.csv'
-ds find molecules in patents from dataframe my_patents_df
+ds search for molecules in patents ?
+ds search for molecules in patents from list ['CN108473493B','US20190023713A1']
+ds search for molecules in patents from file 'my_patents.csv'
+ds search for molecules in patents from dataframe my_patents_df
 
 ds list all collections ?
 ds list all collections
@@ -51,12 +51,12 @@ result open
 ds search collection 'patent-uspto' for '"CC(CCO)CCCC(C)C"' show (data)
 ds search collection 'patent-uspto' for '"CC(CCO)CCCC(C)C"' show (docs)
 
-ds find patents ?
-ds find patents containing molecule CC(C)(c1ccccn1)C(CC(=O)O)Nc1nc(-c2c[nH]c3ncc(Cl)cc23)c(C#N)cc1F
-ds find patents containing molecule 'CC(C)(c1ccccn1)C(CC(=O)O)Nc1nc(-c2c[nH]c3ncc(Cl)cc23)c(C#N)cc1F' save as 'patents'
-ds find patents containing molecule InChI=1S/C24H20ClFN6O2/c1-24(2,18-5-3-4-6-28-18)19(9-20(33)34)31-23-17(26)7-13(10-27)21(32-23)16-12-30-22-15(16)8-14(25)11-29-22/h3-8,11-12,19H,9H2,1-2H3,(H,29,30)(H,31,32)(H,33,34)
-ds find patents containing molecule JUPUMSRQQQUOLP-UHFFFAOYSA-N save as 'patents'
-ds find patents containing molecule 'JUPUMSRQQQUOLP-UHFFFAOYSA-N'
+ds search for patents ?
+ds search for patents containing molecule CC(C)(c1ccccn1)C(CC(=O)O)Nc1nc(-c2c[nH]c3ncc(Cl)cc23)c(C#N)cc1F
+ds search for patents containing molecule 'CC(C)(c1ccccn1)C(CC(=O)O)Nc1nc(-c2c[nH]c3ncc(Cl)cc23)c(C#N)cc1F' save as 'patents'
+ds search for patents containing molecule InChI=1S/C24H20ClFN6O2/c1-24(2,18-5-3-4-6-28-18)19(9-20(33)34)31-23-17(26)7-13(10-27)21(32-23)16-12-30-22-15(16)8-14(25)11-29-22/h3-8,11-12,19H,9H2,1-2H3,(H,29,30)(H,31,32)(H,33,34)
+ds search for patents containing molecule JUPUMSRQQQUOLP-UHFFFAOYSA-N save as 'patents'
+ds search for patents containing molecule 'JUPUMSRQQQUOLP-UHFFFAOYSA-N'
 
 ds reset login ?
 ds reset login

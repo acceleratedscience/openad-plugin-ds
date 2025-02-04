@@ -36,11 +36,29 @@ class PluginCommand:
         # Command definition
         statements.append(
             py.Forward(
-                py.Word(PLUGIN_NAMESPACE)
+                py.CaselessKeyword(PLUGIN_NAMESPACE)
                 + l_ist
                 + a_ll
                 + collections
                 + py.Optional(details)("details")
+                + clause_save_as
+            )(self.parser_id)
+        )
+
+        # BACKWARD COMPATIBILITY WITH TOOLKIT COMMAND
+        # -------------------------------------------
+        # Original command:
+        #   - display all collections
+        # New command:
+        #   - ds list all collections [ details ]
+        # To be forwarded:
+        #   - [ ds ] display all collections
+        statements.append(
+            py.Forward(
+                py.CaselessKeyword(PLUGIN_NAMESPACE)
+                + py.CaselessKeyword("display")
+                + a_ll
+                + collections
                 + clause_save_as
             )(self.parser_id)
         )

@@ -37,11 +37,33 @@ class PluginCommand:
         # Command definition
         statements.append(
             py.Forward(
-                py.Word(PLUGIN_NAMESPACE)
+                py.CaselessKeyword(PLUGIN_NAMESPACE)
                 + l_ist
                 + collections
                 + f_or
                 + (domain | domains)
+                + (str_quoted("domain") | list_quoted("domain_list"))
+                + clause_save_as
+            )(self.parser_id)
+        )
+
+        # BACKWARD COMPATIBILITY WITH TOOLKIT COMMAND
+        # -------------------------------------------
+        # Original command:
+        #   - display collections for domain '<domain_name>'
+        #   - display collections in domains from list ['<domain_name>',...]
+        # New command:
+        #   - ds list collections for domain '<domain_name>'
+        # To be forwarded:
+        #   - [ ds ] display collections for domain '<domain_name>'
+        statements.append(
+            py.Forward(
+                py.CaselessKeyword(PLUGIN_NAMESPACE)
+                + py.CaselessKeyword("display")
+                + collections
+                + py.MatchFirst(
+                    [(f_or + domain), (py.CaselessKeyword("in") + domains + py.CaselessKeyword("from") + l_ist)]
+                )
                 + (str_quoted("domain") | list_quoted("domain_list"))
                 + clause_save_as
             )(self.parser_id)

@@ -37,10 +37,30 @@ class PluginCommand:
         # Command definition
         statements.append(
             py.Forward(
-                py.Word(PLUGIN_NAMESPACE)
+                py.CaselessKeyword(PLUGIN_NAMESPACE)
                 + l_ist
                 + collections
                 + containing
+                + str_quoted("search_query")
+                + clause_save_as
+            )(self.parser_id)
+        )
+
+        # BACKWARD COMPATIBILITY WITH TOOLKIT COMMAND
+        # -------------------------------------------
+        # Original command:
+        #   - display collection matches for '<search_query>'
+        # New command:
+        #   - ds list collections containing '<search_query>'
+        # To be forwarded:
+        #   - [ ds ] display collection matches for '<search_query>'
+        statements.append(
+            py.Forward(
+                py.CaselessKeyword(PLUGIN_NAMESPACE)
+                + py.CaselessKeyword("display")
+                + py.CaselessKeyword("collection")
+                + py.CaselessKeyword("matches")
+                + py.CaselessKeyword("for")
                 + str_quoted("search_query")
                 + clause_save_as
             )(self.parser_id)
