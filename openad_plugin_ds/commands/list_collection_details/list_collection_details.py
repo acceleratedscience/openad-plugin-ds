@@ -1,4 +1,5 @@
 import pandas as pd
+from datetime import datetime
 
 # OpenAD
 from openad.app.global_var_lib import GLOBAL_SETTINGS
@@ -60,13 +61,14 @@ def list_collection_details(cmd_pointer, cmd: dict):
                 f"<yellow>Domain   </yellow> {' / '.join(collection.metadata.domain)}",
                 f"<yellow>Type     </yellow> {collection.metadata.type}",
                 f"<yellow>Entries  </yellow> {pretty_nr(collection.documents)}",
-                f"<yellow>Created  </yellow> {pretty_date(collection.metadata.created.timestamp(), 'pretty', include_time=False)}",
+                f"<yellow>Created  </yellow> {pretty_date(datetime.fromisoformat(collection.metadata.created).timestamp(), 'pretty', include_time=False)}",
             ]
         )
         output_text(print_str, return_val=False, width=80, pad=1)
 
     # Return data for API
     else:
+        print(collection)
         results_table = [
             {
                 "Collection Name": collection.name,
@@ -75,8 +77,8 @@ def list_collection_details(cmd_pointer, cmd: dict):
                 "Domain": " / ".join(collection.metadata.domain),
                 "Type": collection.metadata.type,
                 "Entries": collection.documents,
-                "Created": collection.metadata.created.strftime("%Y-%m-%d"),
-                "Created timestamp": collection.metadata.created,
+                "Created": datetime.fromisoformat(collection.metadata.created).strftime("%Y-%m-%d"),
+                "Created timestamp": datetime.fromisoformat(collection.metadata.created).timestamp(),
             }
         ]
         df = pd.DataFrame(results_table)

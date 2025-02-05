@@ -7,6 +7,17 @@ from openad.app.global_var_lib import GLOBAL_SETTINGS
 from openad_tools.jupyter import save_df_as_csv, col_from_df, csv_to_df
 from openad_tools.output import output_error, output_table, output_success, output_warning
 
+
+from deepsearch.chemistry.queries import (
+    query_chemistry,
+    CompoundsBySubstructure,
+    CompoundsBySimilarity,
+    CompoundsBySmarts,
+    CompoundsIn,
+    DocumentsByIds,
+    DocumentsHaving,
+)
+
 # Plugin
 from openad_plugin_ds.plugin_msg import msg as plugin_msg
 from openad_plugin_ds.plugin_params import PLUGIN_KEY
@@ -44,6 +55,12 @@ def find_molecules_in_patents(cmd_pointer, cmd: dict):
             df.columns = df.columns.str.lower()
             patent_id_list = col_from_df(df, "patent id")
             if not patent_id_list:
+                patent_id_list = col_from_df(df, "publication_id")
+            if not patent_id_list:
+                patent_id_list = col_from_df(df, "application_id")
+            if not patent_id_list:
+                patent_id_list = col_from_df(df, "title")
+            if not patent_id_list:
                 patent_id_list = col_from_df(df, "patent_id")
             if not patent_id_list:
                 patent_id_list = col_from_df(df, "patentid")
@@ -63,33 +80,19 @@ def find_molecules_in_patents(cmd_pointer, cmd: dict):
 
     # Fetch results from API
     try:
-        query = MoleculesInPatentsQuery(
-            patents=patent_id_list,
-            num_items=20,
-        )
 
-        resp = api.queries.run(query)
+        resp = query_chemistry(api, CompoundsIn(documents=DocumentsByIds(publication_ids=patent_id_list)), limit=20)
+
         # raise Exception('This is a test error')
     except Exception as err:  # pylint: disable=broad-except
         return output_error(plugin_msg("err_deepsearch", err))
 
     # Compile results
     results_table = []
-    for row in resp.outputs["molecules"]:
-        result = {
-            "Id": row["persistent_id"],
-            "SMILES": "",
-            "InChIKey": "",
-            "InChI": "",
-        }
-        for ref in row["identifiers"]:
-            if ref["type"] == "smiles":
-                result["SMILES"] = ref["value"]
-            if ref["type"] == "inchikey":
-                result["InChIKey"] = ref["value"]
-            if ref["type"] == "inchi":
-                result["InChI"] = ref["value"]
-        results_table.append(result)
+    for row_obj in resp:
+        row = row_obj.model_dump()
+        row.pop("persistent_id")
+        results_table.append(row)
 
     # List of patent IDs to print
     patent_list_output = "\n<reset>- " + "\n- ".join(patent_id_list) + "</reset>"

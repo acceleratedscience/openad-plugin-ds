@@ -1,4 +1,6 @@
 import pandas as pd
+from datetime import datetime
+
 
 # OpenAD
 from openad.app.global_var_lib import GLOBAL_SETTINGS
@@ -44,8 +46,8 @@ def list_all_collections(cmd_pointer, cmd: dict):
             "Entries": c.documents,
             "Domain": " / ".join(c.metadata.domain),
             "Type": c.metadata.type,
-            "Created": c.metadata.created.strftime("%Y-%m-%d"),
-            "created_timestamp": c.metadata.created,
+            "Created": datetime.fromisoformat(c.metadata.created).strftime("%Y-%m-%d"),
+            "created_timestamp": datetime.fromisoformat(c.metadata.created).timestamp(),
             "Elastic ID": c.source.elastic_id,
             "Description": c.metadata.description,
         }
@@ -80,7 +82,7 @@ def list_all_collections(cmd_pointer, cmd: dict):
                             f"<yellow>Domain   </yellow> {collection['Domain']}",
                             f"<yellow>Type     </yellow> {collection['Type']}",
                             f"<yellow>Entries  </yellow> {collection['Entries']}",
-                            f"<yellow>Created  </yellow> {pretty_date(collection['created_timestamp'].timestamp(), 'pretty', include_time=False)}",
+                            f"<yellow>Created  </yellow> {pretty_date(collection['created_timestamp'], 'pretty', include_time=False)}",
                         ]
                     )
                     + "\n"

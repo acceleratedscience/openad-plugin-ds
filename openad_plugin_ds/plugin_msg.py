@@ -27,10 +27,7 @@ _messages = {
     # Find patents
     "success_patents_found": lambda result_count, result_type, identifier: f"We found {result_count} patents containing the requested {result_type}:\n<yellow>{identifier}</yellow>",
     "err_no_patents_found": lambda result_type, identifier: f"No patents found containing {result_type}:\n<yellow>{identifier}</yellow>"
-        + (
-            "\n<soft>Note: The identifier was not recognized to be a SMILES or InChI so it is assumed to be an InChIKey</soft>"
-            if result_type == "InChIKey" else ""
-        ),
+        ,
 
     # List all collection
     "err_no_collections_available": "No collections found... Something is wrong",
