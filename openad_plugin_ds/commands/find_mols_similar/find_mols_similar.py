@@ -16,6 +16,16 @@ from openad_plugin_ds.plugin_params import PLUGIN_KEY
 # Deep Search
 from deepsearch.chemistry.queries.molecules import MoleculeQuery, MolQueryType
 
+from deepsearch.chemistry.queries import (
+    query_chemistry,
+    CompoundsBySubstructure,
+    CompoundsBySimilarity,
+    CompoundsBySmarts,
+    CompoundsIn,
+    DocumentsByIds,
+    DocumentsHaving,
+)
+
 
 def find_similar_molecules(cmd_pointer, cmd):
     """
@@ -41,33 +51,17 @@ def find_similar_molecules(cmd_pointer, cmd):
 
     # Fetch results from API
     try:
-        query = MoleculeQuery(
-            query=canonical_smiles,
-            query_type=MolQueryType.SIMILARITY,
-        )
+        resp = query_chemistry(api, CompoundsBySimilarity(structure=canonical_smiles))
 
-        resp = api.queries.run(query)
-        # raise Exception("This is a test error")
     except Exception as err:  # pylint: disable=broad-exception-caught
         return output_error(plugin_msg("err_deepsearch", err))
 
     # Parse results
     results_table = []
-    for row in resp.outputs["molecules"]:
-        result = {
-            "id": row["persistent_id"],
-            "SMILES": "",
-            "InChIKey": "",
-            "InChI": "",
-        }
-        for ref in row["identifiers"]:
-            if ref["type"] == "smiles":
-                result["SMILES"] = ref["value"]
-            if ref["type"] == "inchikey":
-                result["InChIKey"] = ref["value"]
-            if ref["type"] == "inchi":
-                result["InChI"] = ref["value"]
-        results_table.append(result)
+    for row_obj in resp:
+        row = row_obj.model_dump()
+        row.pop("persistent_id")
+        results_table.append(row)
 
     # No results found
     if not results_table:
