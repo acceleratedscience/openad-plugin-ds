@@ -78,7 +78,7 @@ def list_collection_details(cmd_pointer, cmd: dict):
                 "Type": collection.metadata.type,
                 "Entries": collection.documents,
                 "Created": datetime.fromisoformat(collection.metadata.created).strftime("%Y-%m-%d"),
-                "Created timestamp": datetime.timestamp(collection.metadata.created),
+                "Created timestamp": datetime.fromisoformat(collection.metadata.created).timestamp(),
             }
         ]
         df = pd.DataFrame(results_table)

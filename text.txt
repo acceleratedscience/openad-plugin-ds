@@ -14,7 +14,7 @@ Collections
 
 
 Patents
-10 * search for patents containing molecule '<smiles>' | '<inchi>' | '<inchikey>' [ save as '<filename.csv>' ]
+10 * search for patents containing molecule '<smiles>'  [ save as '<filename.csv>' ]
 
 
 PLUGIN:
@@ -40,4 +40,4 @@ System
 x ds reset login
 
 Patents
-10 ds search for patents containing molecule <smiles> | <inchi> | <inchikey> [ save as '<filename.csv>' ]
+10 ds search for patents containing molecule <smiles>  [ save as '<filename.csv>' ]

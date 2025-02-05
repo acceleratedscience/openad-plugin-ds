@@ -55,6 +55,12 @@ def find_molecules_in_patents(cmd_pointer, cmd: dict):
             df.columns = df.columns.str.lower()
             patent_id_list = col_from_df(df, "patent id")
             if not patent_id_list:
+                patent_id_list = col_from_df(df, "publication_id")
+            if not patent_id_list:
+                patent_id_list = col_from_df(df, "application_id")
+            if not patent_id_list:
+                patent_id_list = col_from_df(df, "title")
+            if not patent_id_list:
                 patent_id_list = col_from_df(df, "patent_id")
             if not patent_id_list:
                 patent_id_list = col_from_df(df, "patentid")
