@@ -328,6 +328,11 @@ def search_collection(cmd_pointer, cmd: dict):
     if limit_results > 0:
         df = df.truncate(after=limit_results - 1)
 
+    # Save results to file (prints success message)
+    if "save_as" in cmd:
+        results_file = str(cmd["results_file"])
+        save_df_as_csv(cmd_pointer, df, results_file)
+
     # Display results in CLI & Notebook
     if not return_data:
         # Stylize the table for Jupyter
@@ -348,15 +353,10 @@ def search_collection(cmd_pointer, cmd: dict):
                     df["Snippet"] = df["Snippet"].apply(lambda x: style(x))  # pylint: disable=unnecessary-lambda
                     df["Snippet"] = df["Snippet"].str.wrap(70, break_long_words=True)
 
-        output_table(df, show_index=True, return_val=False)
-
-    # Save results to file (prints success message)
-    if "save_as" in cmd:
-        results_file = str(cmd["results_file"])
-        save_df_as_csv(cmd_pointer, df, results_file)
+        return output_table(df, show_index=True)
 
     # Return data for API
-    if return_data:
+    else:
         # Remove styling tags in the snippets column
         if "Snippet" in df:
             df["Snippet"] = df["Snippet"].apply(lambda x: strip_tags(x))  # pylint: disable=unnecessary-lambda
