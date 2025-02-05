@@ -42,6 +42,14 @@ class PluginCommand:
     def add_grammar(self, statements: list, grammar_help: list):
         """Create the command definition & documentation"""
 
+        # BACKWARD COMPATIBILITY WITH TOOLKIT COMMAND
+        # -------------------------------------------
+        # Support for deprecated [ return as data ] clause
+        clause_return_as_data = py.Optional(
+            py.CaselessKeyword("return") + py.CaselessKeyword("as") + py.CaselessKeyword("data")
+        )("return_as_data")
+        # -------------------------------------------
+
         # Command definition
         statements.append(
             py.Forward(
@@ -54,35 +62,11 @@ class PluginCommand:
                 + clause_using
                 + clause_show
                 + clause_estimate_only
-                + clause_save_as
-            )(self.parser_id)
-        )
-
-        # BACKWARD COMPATIBILITY WITH TOOLKIT COMMAND
-        # -------------------------------------------
-        # Original command:
-        #   - search collection '<collection_name_or_key>' for '<search_query>' [ return as data ]
-        # New command:
-        #   - ds search collection '<collection_name_or_key>' for '<search_query>'
-        # To be forwarded:
-        #   - [ ds ] search collection '<collection_name_or_key>' for '<search_query>' [ return as data ]
-        clause_return_as_data = py.Optional(
-            py.CaselessKeyword("return").suppress()
-            + py.CaselessKeyword("as").suppress()
-            + py.CaselessKeyword("data").suppress()
-        )("return_as_data")
-        statements.append(
-            py.Forward(
-                py.CaselessKeyword(PLUGIN_NAMESPACE)
-                + search
-                + collection
-                + str_strict_or_quoted("collection_name_or_key")
-                + f_or
-                + str_strict_or_quoted("search_query")
-                + clause_using
-                + clause_show
-                + clause_estimate_only
+                # BACKWARD COMPATIBILITY WITH TOOLKIT COMMAND
+                # -------------------------------------------
+                # Support for deprecated [ return as data ] clause
                 + clause_return_as_data
+                # -------------------------------------------
                 + clause_save_as
             )(self.parser_id)
         )

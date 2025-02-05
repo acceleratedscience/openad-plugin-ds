@@ -57,7 +57,7 @@ description = f"""Search a given collection in the Deep Search repository.
     Determine the potential number of hits.
 
 <cmd>save as</cmd>
-    save the results as a csv file in your current workspace.
+    Save the results as a csv file in your current workspace.
 
 
 <h1>Examples</h1>

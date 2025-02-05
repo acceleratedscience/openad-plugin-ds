@@ -1,6 +1,3 @@
-# To do: Remove the "return_as_data" functionality, because it is redundant after we introduced the %openadd data magic command.
-# Currently the functionality is still present, but it was removed from the documentation.
-
 import re
 import os
 import json
@@ -146,6 +143,9 @@ def search_collection(cmd_pointer, cmd: dict):
     # Define the data collection to be queried
     data_collection = ElasticDataCollectionSource(elastic_id=elastic_id, index_key=collection_name_or_key)
 
+    # Backward compatibilty - support for "return as data" clause
+    return_data = GLOBAL_SETTINGS["display"] == "api" or "return_as_data" in cmd
+
     # Prepare the data query
     # ----------------------
 
@@ -173,7 +173,7 @@ def search_collection(cmd_pointer, cmd: dict):
         if "save_as" in cmd:
             highlight["pre_tags"] = [""]
             highlight["post_tags"] = [""]
-        elif "return_as_data" in cmd:
+        elif return_data:
             highlight["pre_tags"] = [""]
             highlight["post_tags"] = [""]
         elif GLOBAL_SETTINGS["display"] == "notebook":
@@ -295,7 +295,7 @@ def search_collection(cmd_pointer, cmd: dict):
                     if "doi" in result:
                         result.pop("doi")
 
-        if "_id" in row and GLOBAL_SETTINGS["display"] == "notebook" and "return_as_data" not in cmd:
+        if "_id" in row and GLOBAL_SETTINGS["display"] == "notebook" and not return_data:
             result["DS_URL"] = _make_clickable(_generate_url(host, data_collection, row["_id"]), "DS")
 
         # if slop > 0 or 1: # trash
@@ -329,7 +329,7 @@ def search_collection(cmd_pointer, cmd: dict):
         df = df.truncate(after=limit_results - 1)
 
     # Display results in CLI & Notebook
-    if GLOBAL_SETTINGS["display"] != "api" and "return_as_data" not in cmd:
+    if not return_data:
         # Stylize the table for Jupyter
         if GLOBAL_SETTINGS["display"] == "notebook":
             df = df.style.set_properties(**{"text-align": "left"}).set_table_styles(
@@ -356,7 +356,7 @@ def search_collection(cmd_pointer, cmd: dict):
         save_df_as_csv(cmd_pointer, df, results_file)
 
     # Return data for API
-    if GLOBAL_SETTINGS["display"] == "api" or "return_as_data" in cmd:
+    if return_data:
         # Remove styling tags in the snippets column
         if "Snippet" in df:
             df["Snippet"] = df["Snippet"].apply(lambda x: strip_tags(x))  # pylint: disable=unnecessary-lambda
