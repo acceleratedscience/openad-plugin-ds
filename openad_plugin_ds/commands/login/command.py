@@ -41,7 +41,7 @@ class PluginCommand:
                 plugin_name=PLUGIN_NAME,
                 plugin_namespace=PLUGIN_NAMESPACE,
                 category=self.category,
-                command=f"""{PLUGIN_NAMESPACE} reset login""",
+                command=f"""{PLUGIN_NAMESPACE} login [ reset ]""",
                 description_file=os.path.join(os.path.dirname(os.path.abspath(__file__)), "description.txt"),
             )
         )
