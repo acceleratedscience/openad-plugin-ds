@@ -45,7 +45,6 @@ class PluginCommand:
             )
         )
 
-    d
 
    def exec_command(self, cmd_pointer, parser):
         """Execute the command"""
