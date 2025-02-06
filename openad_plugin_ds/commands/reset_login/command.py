@@ -11,7 +11,7 @@ from openad_plugin_ds.plugin_params import PLUGIN_NAME, PLUGIN_KEY, PLUGIN_NAMES
 from openad_plugin_ds.commands.list_all_collections.description import description
 
 # Login
-from openad_plugin_ds.plugin_login import reset_login
+from openad_plugin_ds.plugin_login import reset_login,login
 
 
 class PluginCommand:
@@ -32,7 +32,7 @@ class PluginCommand:
         """Create the command definition & documentation"""
 
         # Command definition
-        statements.append(py.Forward(py.CaselessKeyword(PLUGIN_NAMESPACE) + reset + login)(self.parser_id))
+        statements.append(py.Forward(py.CaselessKeyword(PLUGIN_NAMESPACE)  + login + py.Optional(reset)('reset')(self.parser_id))
 
         # Command help
         grammar_help.append(
@@ -45,7 +45,12 @@ class PluginCommand:
             )
         )
 
-    def exec_command(self, cmd_pointer, parser):
-        """Execute the command"""
+    d
 
-        reset_login(cmd_pointer)
+   def exec_command(self, cmd_pointer, parser):
+        """Execute the command"""
+        
+        if "reset" in parser:
+            reset_login(cmd_pointer)
+        else:
+            login(cmd_pointer)
