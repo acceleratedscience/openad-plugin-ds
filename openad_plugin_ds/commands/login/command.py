@@ -4,15 +4,13 @@ import pyparsing as py
 # OpenAD
 from openad.core.help import help_dict_create_v2
 
+# OpenAD tools
+from openad_tools.output import output_text, output_error, output_warning, output_success
 
 # Plugin
 from openad_plugin_ds.plugin_grammar_def import reset, login
 from openad_plugin_ds.plugin_params import PLUGIN_NAME, PLUGIN_KEY, PLUGIN_NAMESPACE
-from openad_plugin_ds.commands.list_all_collections.description import description
-
-# Login
-from openad_plugin_ds.plugin_login import reset_login
-from openad_plugin_ds.plugin_login import login as ds_login
+from openad_plugin_ds.plugin_login import login as ds_login, reset_login
 
 
 class PluginCommand:
@@ -44,14 +42,15 @@ class PluginCommand:
                 plugin_namespace=PLUGIN_NAMESPACE,
                 category=self.category,
                 command=f"""{PLUGIN_NAMESPACE} reset login""",
-                description=description,
+                description_file=os.path.join(os.path.dirname(os.path.abspath(__file__)), "description.txt"),
             )
         )
 
     def exec_command(self, cmd_pointer, parser):
         """Execute the command"""
 
-        if "reset" in parser:
+        cmd = parser.as_dict()
+        if "reset" in cmd:
             reset_login(cmd_pointer)
         else:
-            ds_login(cmd_pointer)
+            ds_login(cmd_pointer, True)
