@@ -1,14 +1,13 @@
 from openad_plugin_ds.plugin_params import CLAUSES
 
 
-description = f"""List all available Deep Search collections.
+description = f"""Login or Reset credentials
 
-Add the <cmd>description</cmd> clause to include a description of each collection.
+if Log Login specified you will be logged into deepsearch or if no credentials exist be prompted to enter.
 
-{CLAUSES["save_as"]}
+If reset option specified your credentials will be reset and you will have to login again.
 
 Examples:
-- <cmd>ds list all collections</cmd>
-- <cmd>ds list all collections details</cmd>
-- <cmd>ds list all collections save as 'all_collections.csv'</cmd>
+- <cmd>ds login </cmd>
+- <cmd>ds login reset</cmd>
 """
