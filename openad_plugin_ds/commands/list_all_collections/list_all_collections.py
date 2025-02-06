@@ -67,7 +67,6 @@ def list_all_collections(cmd_pointer, cmd: dict):
 
     # Display results in CLI & Notebook
     if GLOBAL_SETTINGS["display"] != "api":
-
         # Print description of all collections
         if "details" in cmd:
             for collection in results_table:

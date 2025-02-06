@@ -80,7 +80,6 @@ def find_molecules_in_patents(cmd_pointer, cmd: dict):
 
     # Fetch results from API
     try:
-
         resp = query_chemistry(api, CompoundsIn(documents=DocumentsByIds(publication_ids=patent_id_list)), limit=20)
 
         # raise Exception('This is a test error')

@@ -76,7 +76,6 @@ def list_collections_for_domain(cmd_pointer, cmd: dict):
 
     # Display results in CLI & Notebook
     if GLOBAL_SETTINGS["display"] != "api":
-
         # Prettify Entries number
         df_print = df.copy()
         df_print["Entries"] = df_print["Entries"].apply(pretty_nr)
