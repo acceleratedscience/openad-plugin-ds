@@ -57,7 +57,7 @@ ds search for patents containing molecule 'CC(C)(c1ccccn1)C(CC(=O)O)Nc1nc(-c2c[n
 ds search for patents containing molecule JUPUMSRQQQUOLP-UHFFFAOYSA-N save as 'patents'
 ds search for patents containing molecule 'JUPUMSRQQQUOLP-UHFFFAOYSA-N'
 
-ds reset login ?
-ds reset login
-ds reset login
+ds login ?
+ds login reset
+ds login
 ds list all collections
