@@ -44,7 +44,7 @@ In order to use this plugin, you need an API key.
     
     ![Deep Search API key](assets/ds-api-key.png)
 
-3. Use any Deep Search command to be prompted for your credentials.
+3. Use `ds login` or any Deep Search command to be prompted for your credentials.
 
     - **Hostname:** (Enter blank for default - [https://sds.app.accelerate.science](https://sds.app.accelerate.science))
     - **Email:** Your email
