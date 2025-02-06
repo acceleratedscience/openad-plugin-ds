@@ -46,7 +46,7 @@ class PluginCommand:
         )
 
 
-   def exec_command(self, cmd_pointer, parser):
+    def exec_command(self, cmd_pointer, parser):
         """Execute the command"""
         
         if "reset" in parser:
