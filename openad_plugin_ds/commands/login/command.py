@@ -4,9 +4,6 @@ import pyparsing as py
 # OpenAD
 from openad.core.help import help_dict_create_v2
 
-# OpenAD tools
-from openad_tools.output import output_text, output_error, output_warning, output_success
-
 # Plugin
 from openad_plugin_ds.plugin_grammar_def import reset, login
 from openad_plugin_ds.plugin_params import PLUGIN_NAME, PLUGIN_KEY, PLUGIN_NAMESPACE
