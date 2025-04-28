@@ -1,7 +1,0 @@
-Log in to Deep Search.
-
-Add the <cmd>reset</cmd> clause to remove your current credentials.
-
-Examples:
-- <cmd>ds login </cmd>
-- <cmd>ds login reset</cmd>
