@@ -3,9 +3,10 @@ import pandas as pd
 # OpenAD
 from openad.app.global_var_lib import GLOBAL_SETTINGS
 from openad.smols.smol_functions import valid_smiles
-from openad.helpers.output import output_success, output_error, output_table
-from openad.helpers.jupyter import save_df_as_csv
-from openad.helpers.jupyter import jup_display_input_molecule
+
+# OpenAD tools
+from openad_tools.output import output_success, output_error, output_table
+from openad_tools.jupyter import save_df_as_csv, jup_display_input_molecule
 
 # Plugin
 from openad_plugin_ds.plugin_params import PLUGIN_KEY
@@ -14,6 +15,16 @@ from openad_plugin_ds.plugin_msg import msg as plugin_msg
 # Deep Search
 from deepsearch.chemistry.queries.molecules import MoleculeQuery
 from deepsearch.chemistry.queries.molecules import MolQueryType
+
+from deepsearch.chemistry.queries import (
+    query_chemistry,
+    CompoundsBySubstructure,
+    CompoundsBySimilarity,
+    CompoundsBySmarts,
+    CompoundsIn,
+    DocumentsByIds,
+    DocumentsHaving,
+)
 
 
 def find_substructure_molecules(cmd_pointer, cmd: dict):
@@ -38,32 +49,17 @@ def find_substructure_molecules(cmd_pointer, cmd: dict):
 
     # Fetch results from API
     try:
-        query = MoleculeQuery(
-            query=smiles,
-            query_type=MolQueryType.SUBSTRUCTURE,
-        )
-        resp = api.queries.run(query)
-        # raise Exception("This is a test error")
+        resp = query_chemistry(api, CompoundsBySubstructure(structure=smiles))
     except Exception as err:  # pylint: disable=broad-exception-caught
         return output_error(plugin_msg("err_deepsearch", err))
 
     # Parse results
     results_table = []
-    for row in resp.outputs["molecules"]:
-        result = {
-            "id": row["persistent_id"],
-            "SMILES": "",
-            "InChIKey": "",
-            "InChI": "",
-        }
-        for ref in row["identifiers"]:
-            if ref["type"] == "smiles":
-                result["SMILES"] = ref["value"]
-            if ref["type"] == "inchikey":
-                result["InChIKey"] = ref["value"]
-            if ref["type"] == "inchi":
-                result["InChI"] = ref["value"]
-        results_table.append(result)
+
+    for row_obj in resp:
+        row = row_obj.model_dump()
+        row.pop("persistent_id")
+        results_table.append(row)
 
     # No results found
     if not results_table:

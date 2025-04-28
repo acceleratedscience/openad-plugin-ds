@@ -1,0 +1,63 @@
+deep search
+deep search ?
+? deep search
+ds
+ds ?
+
+ds search for molecules similar ?
+ds search for molecules similar to CC(=CCC/C(=C/CO)/C)C
+ds search for molecules similar to 'C1(C(=C)C([O-])C1C)=O'
+ds search for molecules similar to CC1=CCC2CC1C2(C)C save as 'similar_mols.csv'
+ds search for molecules similar to CC1CCC2C1C(=O)OC=C2C save as 'similar_mols'
+
+ds search for molecules with substructure ?
+ds search for molecules with substructure C1(C(=C)C([O-])C1C)=O
+ds search for molecules with substructure 'C1=CCCCC1' save as 'my_mol'
+
+ds search for molecules in patents ?
+ds search for molecules in patents from list ['CN108473493B','US20190023713A1']
+ds search for molecules in patents from file 'my_patents.csv'
+ds search for molecules in patents from dataframe my_patents_df
+
+ds list all collections ?
+ds list all collections
+ds list all collections details
+ds list all collections save as 'all_collections.csv'
+
+ds list all domains ?
+ds list all domains
+ds list all domains save as 'all_domains'
+
+ds list collections containing ?
+ds list collections containing 'Ibuprofen'
+ds list collections containing '"blood-brain barrier"'
+ds list collections containing 'main-text.text:("power conversion efficiency" OR PCE) AND organ*'
+
+ds list collections for domain ?
+ds list collections for domain 'Business Insights'
+ds list collections for domains ['Materials Science','Scientific Literature']
+
+ds list collection details ?
+ds list collection details 'Patents from USPTO'
+ds list collection details 'patent-uspto'
+
+ds search collection ?
+ds search collection 'arxiv-abstract' for 'ide("power conversion efficiency" OR PCE) AND organ*' USING (limit_results=10 slop=0) show (docs)
+ds search collection 'arxiv-abstract' for '"power efficiency"' USING (slop=0) estimate only
+ds search collection 'arxiv-abstract' for '"power efficiency"' USING (slop=1) estimate only
+ds search collection 'arxiv-abstract' for '"power efficiency"' USING (slop=5) estimate only
+ds search collection 'pubchem' for 'Ibuprofen' show (data)
+result open
+ds search collection 'patent-uspto' for '"CC(CCO)CCCC(C)C"' show (data)
+ds search collection 'patent-uspto' for '"CC(CCO)CCCC(C)C"' show (docs)
+
+ds search for patents ?
+ds search for patents containing molecule CC(C)(c1ccccn1)C(CC(=O)O)Nc1nc(-c2c[nH]c3ncc(Cl)cc23)c(C#N)cc1F
+ds search for patents containing molecule 'CC(C)(c1ccccn1)C(CC(=O)O)Nc1nc(-c2c[nH]c3ncc(Cl)cc23)c(C#N)cc1F' save as 'patents'
+ds search for patents containing molecule JUPUMSRQQQUOLP-UHFFFAOYSA-N save as 'patents'
+ds search for patents containing molecule 'JUPUMSRQQQUOLP-UHFFFAOYSA-N'
+
+ds login ?
+ds login reset
+ds login
+ds list all collections

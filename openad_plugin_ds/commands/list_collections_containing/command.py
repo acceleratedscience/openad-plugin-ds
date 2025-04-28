@@ -5,7 +5,7 @@ import pyparsing as py
 from openad.core.help import help_dict_create_v2
 
 # Plugin
-from openad_grammar_def import str_quoted, clause_save_as
+from openad_tools.grammar_def import str_quoted, clause_save_as
 from openad_plugin_ds.plugin_grammar_def import l_ist, collections, containing
 from openad_plugin_ds.plugin_params import PLUGIN_NAME, PLUGIN_KEY, PLUGIN_NAMESPACE
 from openad_plugin_ds.commands.list_collections_containing.list_collections_containing import (
@@ -37,10 +37,30 @@ class PluginCommand:
         # Command definition
         statements.append(
             py.Forward(
-                py.Word(PLUGIN_NAMESPACE)
+                py.CaselessKeyword(PLUGIN_NAMESPACE)
                 + l_ist
                 + collections
                 + containing
+                + str_quoted("search_query")
+                + clause_save_as
+            )(self.parser_id)
+        )
+
+        # BACKWARD COMPATIBILITY WITH TOOLKIT COMMAND
+        # -------------------------------------------
+        # Original command:
+        #   - display collection matches for '<search_query>'
+        # New command:
+        #   - ds list collections containing '<search_query>'
+        # To be forwarded:
+        #   - [ ds ] display collection matches for '<search_query>'
+        statements.append(
+            py.Forward(
+                py.CaselessKeyword(PLUGIN_NAMESPACE)
+                + py.CaselessKeyword("display")
+                + py.CaselessKeyword("collection")
+                + py.CaselessKeyword("matches")
+                + py.CaselessKeyword("for")
                 + str_quoted("search_query")
                 + clause_save_as
             )(self.parser_id)

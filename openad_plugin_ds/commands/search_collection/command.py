@@ -5,14 +5,13 @@ import pyparsing as py
 from openad.core.help import help_dict_create_v2
 
 # Plugin
-from openad_grammar_def import str_strict_or_quoted, clause_using, clause_save_as
+from openad_tools.grammar_def import str_strict_or_quoted, clause_using, clause_save_as
 from openad_plugin_ds.plugin_grammar_def import (
     search,
     f_or,
     collection,
     clause_show,
     clause_estimate_only,
-    clause_return_as_data,
 )
 from openad_plugin_ds.plugin_params import PLUGIN_NAME, PLUGIN_KEY, PLUGIN_NAMESPACE
 from openad_plugin_ds.commands.search_collection.search_collection import search_collection
@@ -43,10 +42,18 @@ class PluginCommand:
     def add_grammar(self, statements: list, grammar_help: list):
         """Create the command definition & documentation"""
 
+        # BACKWARD COMPATIBILITY WITH TOOLKIT COMMAND
+        # -------------------------------------------
+        # Support for deprecated [ return as data ] clause
+        clause_return_as_data = py.Optional(
+            py.CaselessKeyword("return") + py.CaselessKeyword("as") + py.CaselessKeyword("data")
+        )("return_as_data")
+        # -------------------------------------------
+
         # Command definition
         statements.append(
             py.Forward(
-                py.Word(PLUGIN_NAMESPACE)
+                py.CaselessKeyword(PLUGIN_NAMESPACE)
                 + search
                 + collection
                 + str_strict_or_quoted("collection_name_or_key")
@@ -55,7 +62,11 @@ class PluginCommand:
                 + clause_using
                 + clause_show
                 + clause_estimate_only
-                # + clause_return_as_data
+                # BACKWARD COMPATIBILITY WITH TOOLKIT COMMAND
+                # -------------------------------------------
+                # Support for deprecated [ return as data ] clause
+                + clause_return_as_data
+                # -------------------------------------------
                 + clause_save_as
             )(self.parser_id)
         )

@@ -3,17 +3,26 @@ import pandas as pd
 # OpenAD
 from openad.app.global_var_lib import GLOBAL_SETTINGS
 from openad.smols.smol_cache import create_analysis_record, save_result
-from openad.smols.smol_functions import canonicalize, valid_smiles, valid_inchi
-from openad.helpers.jupyter import save_df_as_csv
-from openad.helpers.jupyter import jup_display_input_molecule
-from openad.helpers.output import output_success, output_error, output_table
+from openad.smols.smol_functions import canonicalize, valid_smiles
+
+# OpenAD tools
+from openad_tools.jupyter import save_df_as_csv, jup_display_input_molecule
+from openad_tools.output import output_success, output_error, output_table
 
 # Plugin
 from openad_plugin_ds.plugin_msg import msg as plugin_msg
 from openad_plugin_ds.plugin_params import PLUGIN_KEY
 
 # Deep Search
-from deepsearch.chemistry.queries.molecules import PatentsWithMoleculesQuery, MolId, MolIdType
+from deepsearch.chemistry.queries import (
+    query_chemistry,
+    CompoundsBySubstructure,
+    CompoundsBySimilarity,
+    CompoundsBySmarts,
+    CompoundsIn,
+    DocumentsByIds,
+    DocumentsHaving,
+)
 
 
 def find_patents_containing_molecule(cmd_pointer, cmd: dict):
@@ -39,27 +48,13 @@ def find_patents_containing_molecule(cmd_pointer, cmd: dict):
 
     # Fetch results from API
     try:
-        if valid_smiles(identifier) is True:
-            identifier = canonicalize(identifier) or identifier
-            query = PatentsWithMoleculesQuery(
-                molecules=[MolId(type=MolIdType.SMILES, value=identifier)],
-                num_items=20,
-            )
-            result_type = "SMILES"
-        elif valid_inchi(identifier) is True:
-            query = PatentsWithMoleculesQuery(
-                molecules=[MolId(type=MolIdType.INCHI, value=identifier)],
-                num_items=20,
-            )
-            result_type = "InChI"
+        if not valid_smiles(identifier):
+            return output_error(plugin_msg("err_invalid_identifier"))
         else:
-            query = PatentsWithMoleculesQuery(
-                molecules=[MolId(type=MolIdType.INCHIKEY, value=identifier)],
-                num_items=20,
-            )
-            result_type = "InChIKey"
-
-        resp = api.queries.run(query)
+            canonical_smiles = canonicalize(identifier)
+        resp = query_chemistry(
+            api, DocumentsHaving(compounds=CompoundsBySubstructure(structure=canonical_smiles)), limit=20
+        )
         # raise Exception("This is a test error")
     except Exception as err:  # pylint: disable=broad-exception-caught
         output_error(plugin_msg("err_deepsearch", err), return_val=False)
@@ -67,12 +62,10 @@ def find_patents_containing_molecule(cmd_pointer, cmd: dict):
 
     # Compile results
     results_table = []
-    for doc in resp.outputs["patents"]:
-        result = {"Patent ID": ""}
-        for ident in doc["identifiers"]:
-            if ident["type"] == "patentid":
-                result["Patent ID"] = ident["value"]
-        results_table.append(result)
+    for row_obj in resp:
+        row = row_obj.model_dump()
+        row.pop("persistent_id")
+        results_table.append(row)
 
     # No results found
     # results_table = [] # Keep here for testing
@@ -92,11 +85,11 @@ def find_patents_containing_molecule(cmd_pointer, cmd: dict):
     # `enrich mols with analysis`
     save_result(
         create_analysis_record(
-            identifier,
-            PLUGIN_KEY,
-            "Patents_Containing_Molecule",
-            "",
-            results_table,
+            smiles=identifier,
+            toolkit=PLUGIN_KEY,
+            function="patents_containing_molecule",
+            parameters="",
+            results=results_table,
         ),
         cmd_pointer=cmd_pointer,
     )

@@ -1,6 +1,3 @@
-# To do: Remove the "return_as_data" functionality, because it is redundant after we introduced the %openadd data magic command.
-# Currently the functionality is still present, but it was removed from the documentation.
-
 import re
 import os
 import json
@@ -10,12 +7,15 @@ import urllib.parse
 from copy import deepcopy
 
 # OpenAD
-from openad.plugins.style_parser import style, strip_tags
 from openad.app.global_var_lib import GLOBAL_SETTINGS
-from openad.helpers.general import confirm_prompt
-from openad.helpers.jupyter import save_df_as_csv, parse_using_clause
 from openad.helpers.credentials import load_credentials
-from openad.helpers.output import output_text, output_table, output_error, output_warning
+
+# OpenAD tools
+from openad_tools.style_parser import style, strip_tags
+from openad_tools.helpers import confirm_prompt
+from openad_tools.jupyter import save_df_as_csv
+from openad_tools.pyparsing import parse_using_clause
+from openad_tools.output import output_text, output_table, output_error, output_warning
 
 # Plugin
 from openad_plugin_ds.plugin_msg import msg as plugin_msg
@@ -70,9 +70,9 @@ def search_collection(cmd_pointer, cmd: dict):
     # Query paremeter defaults
     defaults = {
         "collection_name_or_key": "pubchem",
-        "elastic_page_size": 50,
-        "elastic_id": "default",
-        "slop": 3,
+        "elastic_page_size": 50,  # aka `page_size` (per ds4sd examle and deprecated toolkit command)
+        "elastic_id": "default",  # aka `system_id` (per ds4sd examle and deprecated toolkit command)
+        "slop": 3,  # aka `edit_distance` (per ds4sd examle and deprecated toolkit command)
         "limit_results": 0,
     }
 
@@ -82,10 +82,28 @@ def search_collection(cmd_pointer, cmd: dict):
     )
 
     # Parse USING parameters
-    params = parse_using_clause(cmd.get("using"), allowed=["elastic_page_size", "elastic_id", "slop", "limit_results"])
-    elastic_page_size = int(params.get("elastic_page_size", defaults["elastic_page_size"]))
-    elastic_id = params.get("elastic_id", defaults["elastic_id"])
-    slop = int(params.get("slop", defaults["slop"]))
+    params = parse_using_clause(
+        cmd.get("using"),
+        allowed=[
+            "elastic_page_size",
+            "page_size",  # Backward compatibilty, maps to "elastic_page_size"
+            "elastic_id",
+            "system_id",  # Backward compatibilty, maps to "elastic_id"
+            "slop",
+            "edit_distance",  # Backward compatibilty, maps to "slop"
+            "limit_results",
+        ],
+    )
+    elastic_page_size = int(
+        params.get("elastic_page_size", defaults["elastic_page_size"])
+        or params.get("page_size", defaults["elastic_page_size"])
+    )  # Backward compatibilty
+    elastic_id = params.get("elastic_id", defaults["elastic_id"]) or params.get(
+        "system_id", defaults["elastic_id"]
+    )  # Backward compatibilty
+    slop = int(
+        params.get("slop", defaults["slop"]) or params.get("edit_distance", defaults["slop"])
+    )  # Backward compatibilty
     limit_results = int(params.get("limit_results", defaults["limit_results"]))
 
     # Parse collections
@@ -125,6 +143,9 @@ def search_collection(cmd_pointer, cmd: dict):
     # Define the data collection to be queried
     data_collection = ElasticDataCollectionSource(elastic_id=elastic_id, index_key=collection_name_or_key)
 
+    # Backward compatibilty - support for "return as data" clause
+    return_data = GLOBAL_SETTINGS["display"] == "api" or "return_as_data" in cmd
+
     # Prepare the data query
     # ----------------------
 
@@ -152,7 +173,7 @@ def search_collection(cmd_pointer, cmd: dict):
         if "save_as" in cmd:
             highlight["pre_tags"] = [""]
             highlight["post_tags"] = [""]
-        elif "return_as_data" in cmd:
+        elif return_data:
             highlight["pre_tags"] = [""]
             highlight["post_tags"] = [""]
         elif GLOBAL_SETTINGS["display"] == "notebook":
@@ -274,7 +295,7 @@ def search_collection(cmd_pointer, cmd: dict):
                     if "doi" in result:
                         result.pop("doi")
 
-        if "_id" in row and GLOBAL_SETTINGS["display"] == "notebook" and "return_as_data" not in cmd:
+        if "_id" in row and GLOBAL_SETTINGS["display"] == "notebook" and not return_data:
             result["DS_URL"] = _make_clickable(_generate_url(host, data_collection, row["_id"]), "DS")
 
         # if slop > 0 or 1: # trash
@@ -307,8 +328,13 @@ def search_collection(cmd_pointer, cmd: dict):
     if limit_results > 0:
         df = df.truncate(after=limit_results - 1)
 
+    # Save results to file (prints success message)
+    if "save_as" in cmd:
+        results_file = str(cmd["results_file"])
+        save_df_as_csv(cmd_pointer, df, results_file)
+
     # Display results in CLI & Notebook
-    if GLOBAL_SETTINGS["display"] != "api" and "return_as_data" not in cmd:
+    if not return_data:
         # Stylize the table for Jupyter
         if GLOBAL_SETTINGS["display"] == "notebook":
             df = df.style.set_properties(**{"text-align": "left"}).set_table_styles(
@@ -327,15 +353,10 @@ def search_collection(cmd_pointer, cmd: dict):
                     df["Snippet"] = df["Snippet"].apply(lambda x: style(x))  # pylint: disable=unnecessary-lambda
                     df["Snippet"] = df["Snippet"].str.wrap(70, break_long_words=True)
 
-        output_table(df, show_index=True, return_val=False)
-
-    # Save results to file (prints success message)
-    if "save_as" in cmd:
-        results_file = str(cmd["results_file"])
-        save_df_as_csv(cmd_pointer, df, results_file)
+        return output_table(df, show_index=True)
 
     # Return data for API
-    if GLOBAL_SETTINGS["display"] == "api" or "return_as_data" in cmd:
+    else:
         # Remove styling tags in the snippets column
         if "Snippet" in df:
             df["Snippet"] = df["Snippet"].apply(lambda x: strip_tags(x))  # pylint: disable=unnecessary-lambda

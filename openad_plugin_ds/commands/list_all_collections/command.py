@@ -6,7 +6,7 @@ from openad.core.help import help_dict_create_v2
 
 
 # Plugin
-from openad_grammar_def import clause_save_as
+from openad_tools.grammar_def import clause_save_as
 from openad_plugin_ds.plugin_grammar_def import l_ist, a_ll, collections, details
 from openad_plugin_ds.plugin_params import PLUGIN_NAME, PLUGIN_KEY, PLUGIN_NAMESPACE
 from openad_plugin_ds.commands.list_all_collections.list_all_collections import list_all_collections
@@ -36,11 +36,29 @@ class PluginCommand:
         # Command definition
         statements.append(
             py.Forward(
-                py.Word(PLUGIN_NAMESPACE)
+                py.CaselessKeyword(PLUGIN_NAMESPACE)
                 + l_ist
                 + a_ll
                 + collections
                 + py.Optional(details)("details")
+                + clause_save_as
+            )(self.parser_id)
+        )
+
+        # BACKWARD COMPATIBILITY WITH TOOLKIT COMMAND
+        # -------------------------------------------
+        # Original command:
+        #   - display all collections
+        # New command:
+        #   - ds list all collections [ details ]
+        # To be forwarded:
+        #   - [ ds ] display all collections
+        statements.append(
+            py.Forward(
+                py.CaselessKeyword(PLUGIN_NAMESPACE)
+                + py.CaselessKeyword("display")
+                + a_ll
+                + collections
                 + clause_save_as
             )(self.parser_id)
         )

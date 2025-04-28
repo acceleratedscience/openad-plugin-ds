@@ -4,9 +4,10 @@ import pandas as pd
 from openad.app.global_var_lib import GLOBAL_SETTINGS
 from openad.smols.smol_cache import create_analysis_record, save_result
 from openad.smols.smol_functions import canonicalize, valid_smiles
-from openad.helpers.jupyter import save_df_as_csv
-from openad.helpers.output import output_success, output_error, output_table
-from openad.helpers.jupyter import jup_display_input_molecule
+
+# OpenAD tools
+from openad_tools.jupyter import save_df_as_csv, jup_display_input_molecule
+from openad_tools.output import output_success, output_error, output_table
 
 # Plugin
 from openad_plugin_ds.plugin_msg import msg as plugin_msg
@@ -14,6 +15,16 @@ from openad_plugin_ds.plugin_params import PLUGIN_KEY
 
 # Deep Search
 from deepsearch.chemistry.queries.molecules import MoleculeQuery, MolQueryType
+
+from deepsearch.chemistry.queries import (
+    query_chemistry,
+    CompoundsBySubstructure,
+    CompoundsBySimilarity,
+    CompoundsBySmarts,
+    CompoundsIn,
+    DocumentsByIds,
+    DocumentsHaving,
+)
 
 
 def find_similar_molecules(cmd_pointer, cmd):
@@ -40,33 +51,17 @@ def find_similar_molecules(cmd_pointer, cmd):
 
     # Fetch results from API
     try:
-        query = MoleculeQuery(
-            query=canonical_smiles,
-            query_type=MolQueryType.SIMILARITY,
-        )
+        resp = query_chemistry(api, CompoundsBySimilarity(structure=canonical_smiles))
 
-        resp = api.queries.run(query)
-        # raise Exception("This is a test error")
     except Exception as err:  # pylint: disable=broad-exception-caught
         return output_error(plugin_msg("err_deepsearch", err))
 
     # Parse results
     results_table = []
-    for row in resp.outputs["molecules"]:
-        result = {
-            "id": row["persistent_id"],
-            "SMILES": "",
-            "InChIKey": "",
-            "InChI": "",
-        }
-        for ref in row["identifiers"]:
-            if ref["type"] == "smiles":
-                result["SMILES"] = ref["value"]
-            if ref["type"] == "inchikey":
-                result["InChIKey"] = ref["value"]
-            if ref["type"] == "inchi":
-                result["InChI"] = ref["value"]
-        results_table.append(result)
+    for row_obj in resp:
+        row = row_obj.model_dump()
+        row.pop("persistent_id")
+        results_table.append(row)
 
     # No results found
     if not results_table:
@@ -89,9 +84,10 @@ def find_similar_molecules(cmd_pointer, cmd):
     # Save results as analysis records that can be merged
     # with the molecule working set in a follow up comand:
     # `enrich mols with analysis`
+    # print(">> SAVE RESULT", smiles)
     save_result(
         create_analysis_record(
-            canonical_smiles,
+            smiles,
             PLUGIN_KEY,
             "Similar_Molecules",
             "",

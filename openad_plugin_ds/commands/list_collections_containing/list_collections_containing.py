@@ -2,8 +2,10 @@ import pandas as pd
 
 # OpenAD
 from openad.app.global_var_lib import GLOBAL_SETTINGS
-from openad.helpers.jupyter import save_df_as_csv
-from openad.helpers.output import output_error, output_table, output_success
+
+# OpenAD tools
+from openad_tools.jupyter import save_df_as_csv
+from openad_tools.output import output_error, output_table, output_success
 
 # Plugin
 from openad_plugin_ds.plugin_msg import msg as plugin_msg
@@ -56,8 +58,6 @@ def list_collections_containing(cmd_pointer, cmd: dict):
     ):
         pbar.set_description(f"Querying {c.name}")
 
-        # print(c.metadata.description)
-
         # Search only on document collections
         if c.metadata.type != "Document":
             continue
@@ -74,6 +74,9 @@ def list_collections_containing(cmd_pointer, cmd: dict):
                         "Matches": query_results.outputs["data_count"],
                     }
                 )
+
+            # For testing
+            # - - -
             # raise RunQueryError(task_id=1, message="This is a test error", error_type="err123", detail="aaa")
             # raise RunQueryError(
             #     task_id=1,
@@ -81,6 +84,7 @@ def list_collections_containing(cmd_pointer, cmd: dict):
             #     error_type="RuntimeError",
             #     detail="",
             # )
+
         except RunQueryError as err:
             output_error(plugin_msg("err_deepsearch", err), return_val=False)
 

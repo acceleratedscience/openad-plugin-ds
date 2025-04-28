@@ -1,10 +1,14 @@
 import pandas as pd
+from datetime import datetime
+
 
 # OpenAD
 from openad.app.global_var_lib import GLOBAL_SETTINGS
-from openad.helpers.jupyter import save_df_as_csv
-from openad.helpers.general import pretty_nr, pretty_date
-from openad.helpers.output import output_text, output_error, output_table
+
+# OpenAD tools
+from openad_tools.jupyter import save_df_as_csv
+from openad_tools.helpers import pretty_nr, pretty_date
+from openad_tools.output import output_text, output_error, output_table
 
 # Plugin
 from openad_plugin_ds.plugin_msg import msg as plugin_msg
@@ -42,8 +46,8 @@ def list_all_collections(cmd_pointer, cmd: dict):
             "Entries": c.documents,
             "Domain": " / ".join(c.metadata.domain),
             "Type": c.metadata.type,
-            "Created": c.metadata.created.strftime("%Y-%m-%d"),
-            "created_timestamp": c.metadata.created,
+            "Created": datetime.fromisoformat(c.metadata.created).strftime("%Y-%m-%d"),
+            "created_timestamp": datetime.fromisoformat(c.metadata.created).timestamp(),
             "Elastic ID": c.source.elastic_id,
             "Description": c.metadata.description,
         }
@@ -63,7 +67,6 @@ def list_all_collections(cmd_pointer, cmd: dict):
 
     # Display results in CLI & Notebook
     if GLOBAL_SETTINGS["display"] != "api":
-
         # Print description of all collections
         if "details" in cmd:
             for collection in results_table:
@@ -78,7 +81,7 @@ def list_all_collections(cmd_pointer, cmd: dict):
                             f"<yellow>Domain   </yellow> {collection['Domain']}",
                             f"<yellow>Type     </yellow> {collection['Type']}",
                             f"<yellow>Entries  </yellow> {collection['Entries']}",
-                            f"<yellow>Created  </yellow> {pretty_date(collection['created_timestamp'].timestamp(), 'pretty', include_time=False)}",
+                            f"<yellow>Created  </yellow> {pretty_date(collection['created_timestamp'], 'pretty', include_time=False)}",
                         ]
                     )
                     + "\n"

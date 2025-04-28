@@ -4,14 +4,14 @@ import pyparsing as py
 # OpenAD
 from openad.core.help import help_dict_create_v2
 
+# OpenAD tools
+from openad_tools.grammar_def import molecules, list_quoted, str_quoted, str_strict, clause_save_as
+
 # Plugin
-from openad_grammar_def import molecules, list_quoted, str_quoted, str_strict, clause_save_as
-from openad_plugin_ds.plugin_grammar_def import find, i_n, patents, f_rom, l_ist, file, dataframe
+from openad_plugin_ds.plugin_grammar_def import search_for, i_n, patents, f_rom, l_ist, file, dataframe
 from openad_plugin_ds.plugin_params import PLUGIN_NAME, PLUGIN_KEY, PLUGIN_NAMESPACE
 from openad_plugin_ds.commands.find_mols_in_patents.find_mols_in_patents import find_molecules_in_patents
 from openad_plugin_ds.commands.find_mols_in_patents.description import description
-
-# Login
 from openad_plugin_ds.plugin_login import login
 
 
@@ -35,8 +35,8 @@ class PluginCommand:
         # Command definition
         statements.append(
             py.Forward(
-                py.Word(PLUGIN_NAMESPACE)
-                + find
+                py.CaselessKeyword(PLUGIN_NAMESPACE)
+                + search_for
                 + molecules
                 + i_n
                 + patents
@@ -57,9 +57,9 @@ class PluginCommand:
                 plugin_namespace=PLUGIN_NAMESPACE,
                 category=self.category,
                 command=[
-                    f"{PLUGIN_NAMESPACE} find molecules in patents from file '<filename.csv>' [ save as '<filename.csv>' ]",
-                    f"{PLUGIN_NAMESPACE} find molecules in patents from list ['<patent_id>','<patent_id>',...] [ save as '<filename.csv>' ]",
-                    f"{PLUGIN_NAMESPACE} find molecules in patents from dataframe <dataframe_name> [ save as '<filename.csv>' ]",
+                    f"{PLUGIN_NAMESPACE} search for molecules in patents from file '<filename.csv>' [ save as '<filename.csv>' ]",
+                    f"{PLUGIN_NAMESPACE} search for molecules in patents from list ['<patent_id>','<patent_id>',...] [ save as '<filename.csv>' ]",
+                    f"{PLUGIN_NAMESPACE} search for molecules in patents from dataframe <dataframe_name> [ save as '<filename.csv>' ]",
                 ],
                 description=description,
             )

@@ -4,14 +4,10 @@ import pyparsing as py
 # OpenAD
 from openad.core.help import help_dict_create_v2
 
-
 # Plugin
 from openad_plugin_ds.plugin_grammar_def import reset, login
 from openad_plugin_ds.plugin_params import PLUGIN_NAME, PLUGIN_KEY, PLUGIN_NAMESPACE
-from openad_plugin_ds.commands.list_all_collections.description import description
-
-# Login
-from openad_plugin_ds.plugin_login import reset_login
+from openad_plugin_ds.plugin_login import login as ds_login, reset_login
 
 
 class PluginCommand:
@@ -32,7 +28,9 @@ class PluginCommand:
         """Create the command definition & documentation"""
 
         # Command definition
-        statements.append(py.Forward(py.Word(PLUGIN_NAMESPACE) + reset + login)(self.parser_id))
+        statements.append(
+            py.Forward(py.CaselessKeyword(PLUGIN_NAMESPACE) + login + py.Optional(reset)("reset"))(self.parser_id)
+        )
 
         # Command help
         grammar_help.append(
@@ -40,12 +38,16 @@ class PluginCommand:
                 plugin_name=PLUGIN_NAME,
                 plugin_namespace=PLUGIN_NAMESPACE,
                 category=self.category,
-                command=f"""{PLUGIN_NAMESPACE} reset login""",
-                description=description,
+                command=f"""{PLUGIN_NAMESPACE} login [ reset ]""",
+                description_file=os.path.join(os.path.dirname(os.path.abspath(__file__)), "description.txt"),
             )
         )
 
     def exec_command(self, cmd_pointer, parser):
         """Execute the command"""
 
-        reset_login(cmd_pointer)
+        cmd = parser.as_dict()
+        if "reset" in cmd:
+            reset_login(cmd_pointer)
+        else:
+            ds_login(cmd_pointer, True)
